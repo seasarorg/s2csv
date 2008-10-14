@@ -36,7 +36,7 @@ public interface CSVParser {
 	/**
 	 * 現在の行番号を取得します
 	 * (カウントは０から開始（例：1行目は0））
-	 * @return　行番号
+	 * @return 行番号
 	 */
 	public long getCurrentLineNo();
 	
