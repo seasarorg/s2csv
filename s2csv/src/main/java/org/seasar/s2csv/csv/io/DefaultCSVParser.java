@@ -15,7 +15,7 @@ import org.seasar.s2csv.csv.exception.runtime.CSVReadException;
  */
 public class DefaultCSVParser implements CSVParser {
 
-	private static char QUOTE = '\'';
+	private static char QUOTE = '"';
 	
 	private LineNumberReader reader;
 	
@@ -150,6 +150,12 @@ public class DefaultCSVParser implements CSVParser {
 					}
 					
 					lineNo = reader.getLineNumber();
+					p=0;
+					lineSize = line.length();
+					
+					if(lineSize == 0){
+						continue;
+					}
 				}
 			}
 			
@@ -173,29 +179,26 @@ public class DefaultCSVParser implements CSVParser {
 							continue;
 						}else{
 							//次の文字もquoteならエスケープ
-							if(line.charAt(p) == QUOTE) {
+							if(line.length()>p && line.charAt(p) == QUOTE) {
 								sb.append(c);
 								p++;
-								continue;
 							}else{
-								if(line.charAt(p) != QUOTE ) {
-									quoteState = true;
-									continue;
-								}
+								quoteState = true;
 							}
+							continue;
 						}
 					}
 					
 					sb.append(c);
 				}
 			}else{
-				//次の文字もquoteならエスケープ
-				if(line.charAt(p) == QUOTE) {
-					sb.append(c);
-					p++;
-					continue;
-				}else{
-					if(line.charAt(p) != QUOTE ) {
+				if(c == QUOTE){
+					//次の文字もquoteならエスケープ
+					if(line.length()>p && line.charAt(p) == QUOTE) {
+						sb.append(c);
+						p++;
+						continue;
+					}else{
 						quoteState = false;
 						continue;
 					}
