@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta name="keywords" content="s2csv, Seasar, The Seasar Project, The Seasar Foundation, OSS, Open Source Software, Java, Framework" />
 <meta name="description" content="s2csv" />
-<title>s2csv</title>
+<title>s2csv - Setup</title>
 <link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/main.css" media="screen,projection" />
 <link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/print.css" media="print" />
 </head>
@@ -66,35 +66,35 @@
 
 <div class="section">
 
-<h2>Welcome to the "s2csv" project.</h2>
+<h2>セットアップ</h2>
 
-<p>S2CSVはSeasarとアノテーションを使ってCSVファイルやCSVデータを手軽に扱うためのライブラリです。</p>
-<p>
-まだまだ業務で使用されるCSVファイルを手軽に扱えるように開発しました。
-</p>
-<p>
-S2CSVファイルを使えば以下のようなことが出来ます。<br/>
-・CSVファイル と Java Objectの相互変換を簡単に行える<br/>
-・設定ファイルが必要ない<br/>
-・バリデーションを行うことが出来る<br/>
-・バリデーションメッセージ定義はStrutsライクでなじみがあり、リッチである<br/>
-</p>
+<h4>本体</h4> 
+<p>S2Csvはjarのみで提供しています。ダウンロードのページからs2csvのjarをダウンロードしてください。</p>
+<p>ダウンロードしたjarはクラスパスに追加してください。</p>
 
-<p>
-正式にJarが公開されるまではSVNから取得してください。
-<a href="https://www.seasar.org/svn/sandbox/s2csv/trunk/www/index.html">https://www.seasar.org/svn/sandbox/s2csv/trunk/www/index.html</a>
-</p>
+<h4>diconファイルの設定</h4> 
 
-<h3><a name="blog">コミッタのブログ</a></h3> 
-<p>
-S2CSVは、以下のコミッタが開発しています。<br/>
-フィードバックくださる方は<br/>
-t.newtaro_at_gmail.comのメールアドレスの _at_ を@に変えてメールするか<br/>
-日記へのコメントを待ってます。
-</p> 
-<ul> 
-  <li><a href="http://d.hatena.ne.jp/newta/" target="_blank">newta(にゅーた)日記</a></li> 
-</ul> 
+<p>Seasarプロダクトのdiconファイルに以下を書き加えます。</p>
+<h5>app.dicon</h5> 
+<pre>
+&lt;include path="s2csv.dicon"/&gt;
+</pre>
+<h5>creator.dicon</h5> 
+<pre>
+&lt;component class="org.seasar.s2csv.creator.CsvCreator"/&gt;
+</pre>
+<h5>customizer.dicon</h5> 
+<pre>
+&lt;component name="csvCustomizer" class="org.seasar.framework.container.customizer.CustomizerChain"/&gt;
+</pre>
+
+<br/>
+diconファイルがないと言う人は他のチュートリアルを参考に追加してください。<br/>
+<br/>
+
+<br/>
+<br/>
+<h4>チュートリアル</h4> 
 
 </div><!-- section -->
 

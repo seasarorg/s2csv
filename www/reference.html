@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Language" content="ja" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="keywords" content="s2csv, Seasar, The Seasar Project, The Seasar Foundation, OSS, Open Source Software, Java, Framework" />
+<meta name="description" content="s2csv" />
+<title>s2csv - Reference</title>
+<link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/main.css" media="screen,projection" />
+<link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/print.css" media="print" />
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="header">
+
+<div class="line"><span class="hide">spacer</span></div>
+
+<div id="logo"><h2 id="h01" class="hide">The Seasar Foundation Project Site</h2>
+<a href="http://www.seasar.org/">
+	<img src="http://www.seasar.org/images/seasar_logo_blue.gif" alt="The Seasar Project" width="390" height="180" />
+</a>
+</div>
+
+<div id="tool">
+
+<h2><a href="http://search.seasar.org/">Site Search</a></h2>
+
+<form id="search" name="search" action="http://search.seasar.org/">
+<div>
+	<input id="search_phrase" type="text" name="phrase" size="20" />
+	<input type="hidden" name="perpage" value="30" />
+	<input type="hidden" name="enc" value="UTF-8" />
+	<input id="search_go" type="submit" value="Search" />
+</div>
+</form>
+
+<h2>Seasar Banner</h2>
+<p><a href="http://www.seasar.org/images/seasar_banner.gif"><img src="http://www.seasar.org/images/seasar_banner.gif" alt="Seasar Banner" title="Seasar Banner" width="146" height="33" /></a></p>
+</div>
+
+</div><!-- header -->
+
+
+<div id="contents_left">
+
+<h2>Menu</h2>
+
+<ul>
+	<li><a href="index.html">ホーム</a></li>
+	<li><a href="setup.html">セットアップ</a></li>
+	<li><a href="download.html">ダウンロード</a></li>
+	<li><a href="releaseNotes.html">リリースノート</a></li>
+	<li><a href="reference.html">リファレンス</a>
+		<ul> 
+			<li><a href="#project">プロジェクト構成</a></li>
+			<li><a href="#csvObjectClass">CSVオブジェクトクラス</a></li>
+			<li><a href="#annotation">CSVアノテーション</a></li>
+			<li><a href="#annotationList">CSVアノテーション一覧</a></li>
+			<li><a href="validation">CSVバリデーション</a></li>
+			<li><a href="implImage">実装イメージ</a></li>
+			<li><a href="exception">例外</a></li>
+			<li><a href="util">ユーティリティクラス</a></li>
+		</ul>
+	</li>
+</ul>
+
+</div><!-- contents_left -->
+
+<div id="contents_center">
+
+<div id="article">
+
+<div class="section">
+
+<h2>リファレンス</h2>
+
+
+<a name="project"></a>
+<h4>プロジェクト構成</h4>
+S2Csvでは、ルートパッケージの配下にcsvパッケージを作って、 そこに必要なクラスを格納します。
+
+<p> 
+ルートパッケージ名は、convention.diconで指定します。
+通常のSeasarプロジェクトのtutorialでは、src/main/resourcesで次のように指定されています。
+</p> 
+<h5>convention.dicon</h5> 
+<pre> 
+&lt;components&gt;
+    &lt;component
+        class="org.seasar.framework.convention.impl.NamingConventionImpl"&gt;
+        <b>&lt;initMethod name="addRootPackageName"&gt;
+            &lt;arg&gt;"tutorial"&lt;/arg&gt;
+        &lt;/initMethod&gt;</b> 
+    &lt;/component&gt;
+    &lt;component
+        class="org.seasar.framework.convention.impl.PersistenceConventionImpl"/&gt;
+&lt;/components&gt;
+</pre> 
+<br/>
+<a name="csvObjectClass"></a>
+<h4>CSVオブジェクトクラス</h4> 
+<p> 
+CSVファイルの１行のデータに適応するCSVクラスを作成します。これを以後、このクラスをCSVエンティティクラスと呼びます。
+</p>
+<p>
+CSVエンティティクラスは、ルートパッケージ.csvに格納します。
+定義するクラス名はXxxxCsvと言う名前で定義します。
+</p>
+
+<a name="annotation"></a>
+<h4>CSVアノテーション</h4>
+<p>
+CSVエンティティクラスには以下のアノテーションをつける必要があります。
+</p>
+<p>
+<b>@CSVEntity</b>　このクラスがCSVエンティティクラスであることを示す。
+</p>
+<p>
+またCSVエンティティクラスのフィールドには以下のアノテーションをつける必要があります。
+</p>
+<p>
+<b>@CSVColumn</b>　このフィールドがCSV関連項目であることを示す。
+</p>
+<p>
+CSVエンティティの一番シンプルな設定は以下のようなコードになります。
+</p>
+<pre>
+@CSVEntity(header=false)
+public class DeptCsv {
+
+	@CSVColumn(columnIndex=0)
+	public Long id;
+	
+	@CSVRequired
+	@CSVColumn(columnIndex=1)
+	public Integer deptNo;
+
+	@CSVColumn(columnIndex=2)
+	public String deptName;
+
+	@CSVColumn(columnIndex=3)
+	public String loc;
+
+	@CSVColumn(columnIndex=4)
+	public Integer versionNo;
+}
+</pre>
+
+<a name="annotationList"></a>
+<h4>CSVアノテーション機能</h4>
+<h4>CSVエンティティにつけるアノテーション</h4>
+<h5>@CSVEntity</h5>
+このアノテーションをつけたクラスがCSVエンティティであることを示します。
+CSVエンティティクラスとして扱うには必ずつける必要があります。
+
+<h6>header(オプション)</h6>
+true:ヘッダあり(デフォルト) false:ヘッダなし
+trueにした場合、CSVデータ読み込み時には１行目はデータとして読み込まれません。
+CSVデータ書き出し時にはヘッダ行が付加されるようになります。
+
+<h6>columnCount(オプション)<font color="red">(予定)</font></h6>
+カラムの数を指定します。(デフォルト:0)
+0以下の場合、CSVColumnで設定された最大値がカラム数として使用されます。
+
+<h6>headerCheck(オプション)<font color="red">(予定)</font></h6>
+ヘッダ行の名称が登録されているデータと同じであるかをチェックします。(デフォルト:false)
+エラーの場合、CSVFormatExceptionが発生します。
+このフラグはheaderオプションがtrueのときのみ有効です。
+
+
+<h6>columnCountCheck(オプション)<font color="red">(予定)</font></h6>
+行のカラム数が設定したカラム数と同じになるかチェックします。(デフォルト:false)
+エラーの場合、CSVFormatExceptionが発生します。
+
+
+<h4>CSVカラムフィールドにつけるアノテーション</h4>
+<h5>@CSVColumn</h5>
+<h6>columnIndex(必須)</h6>
+CSVデータのカラム位置を指定します。
+開始番号は0です。(1が開始番号がよいか検討中)
+
+<h6>columnName(オプション)</h6>
+バリデーションメッセージとヘッダに出力されるカラム名。
+未設定の場合、フィールド名が使用されます。
+
+
+<h6>quote(オプション)</h6>
+CSV出力時のquoteの有り無しを設定します。
+true:値は常にquote文字で括られます。
+false:quoteが出力されません。
+ただし、「"」、「改行」、「,」のいずれかの文字が含まれる場合、
+quoteが出力されます。
+CSVデータ読み込み時はこのパラメータの影響を受けません。
+
+<h6>convertor(オプション)</h6>
+CSVのデータをオブジェクトに変換する際と
+オブジェクトデータをCSV文字列に変換する際に呼ばれるコンバートクラスを設定します。
+<font color="red">このオプションは廃止され別の形でこの機能を提供する可能性があります。</font>
+
+<h6>convToObjMethod(オプション)</h6>
+CSVデータからオブジェクトに変換する際に呼び出されるメソッドを設定します。
+メソッドはエンティティクラスに宣言し、
+引数はStringで戻り値はカラムのクラスと同じにする必要があります。
+<font color="red">このオプションは廃止され別の形でこの機能を提供する可能性があります。</font>
+
+<h6>convToCSVMethod(オプション)</h6>
+オブジェクトデータをCSV文字列に変換する際に呼ばれるメソッドを設定します。
+メソッドはエンティティクラスに宣言し、
+引数はカラムのクラスと同じにし、戻り値はStringに必要があります。
+<font color="red">このオプションは廃止され別の形でこの機能を提供する可能性があります。</font>
+
+
+<a name="validation"></a>
+<h4>CSVバリデーション</h4>
+s2csvではバリデーションのアノテーションを付加して、
+validateメソッドを呼び出すだけで、データのバリデーションを行うことが出来ます。
+
+<h4>CSVエンティティにつけるバリデーションアノテーション</h4>
+
+<h5>@CSVRecordValidator</h5>
+全てのカラムをチェックし終わった後にエラーが無い場合呼び出されるバリデーションメソッド指定します。
+レコードの相関チェックなどを行うときに付加します。
+<h6>msgKey(必須)</h6>
+バリデーションエラー時のメッセージキーです。
+<h6>args(オプション)</h6>
+バリデーションエラー時のメッセージ引数です。
+<h6>method(必須)</h6>
+バリデーション実行メソッド。
+実行メソッドの引数はString[]で
+戻り値はbooleanである必要があります。
+<h6>methodClass(オプション)</h6>
+バリデーション実行メソッドのあるクラスです。
+デフォルトではエンティティのメソッドです。
+CSVエンティティ以外を指定する場合、
+実行メソッドはstaticである必要があります。
+<h6>after(オプション)<font color="red">(予定)</font></h6>
+trueにセットした場合、CSVエンティティに値をセットしてからバリデーションメソッドが動作します。
+デフォルトfalse。
+
+<h4>CSVカラムフィールドにつけるバリデーションアノテーション</h4>
+<ul>
+	<li>@CSVByteType　バイト形式チェック</li>
+	<li>@CSVDateType　日付形式チェック</li>
+	<li>@CSVDoubleType　Double形式チェック</li>
+	<li>@CSVEmailType　Email形式チェック</li>
+	<li>@CSVFloatRange　Float範囲チェック</li>
+	<li>@CSVFloatType　Float形式チェック</li>
+	<li>@CSVIntegerType　Integer形式チェック</li>
+	<li>@CSVIntRange　Int範囲チェック</li>
+	<li>@CSVLongRange　Long範囲チェック</li>
+	<li>@CSVLongType　Long形式チェック</li>
+	<li>@CSVMask　マスクチェック</li>
+	<li>@CSVMaxByteLength　最大バイト数チェック</li>
+	<li>@CSVMaxLength　最大桁数チェック</li>
+	<li>@CSVMinByteLength　最小バイト数チェック</li>
+	<li>@CSVMinLength　最小桁数チェック</li>
+	<li>@CSVRequired　必須チェック</li>
+	<li>@CSVShortType　Short形式チェック</li>
+</ul>
+
+<h5>@CSVValidator</h5>
+カラムのチェック時に呼び出されます。
+標準以外でカラム値のバリデーションを行いたい場合にセットします。
+<h6>msgKey(必須)</h6>
+バリデーションエラー時のメッセージキーです。
+<h6>args(オプション)</h6>
+バリデーションエラー時のメッセージ引数です。
+<h6>method(必須)</h6>
+バリデーション実行メソッド。
+実行メソッドの引数はString[]で
+戻り値はbooleanである必要があります。
+<h6>methodClass(オプション)</h6>
+バリデーション実行メソッドのあるクラスです。
+デフォルトではエンティティのメソッドです。
+CSVエンティティ以外を指定する場合、
+実行メソッドはstaticである必要があります。
+
+
+<a name="implImage"></a>
+<h4>実装イメージ</h4>
+s2csvを利用するにはServiceクラス等でcsvのコントローラファクトリをDIされるように設定します。
+<pre>
+public class DeptService extends AbstractService&lt;Dept&gt; {
+
+	public S2CSVCtrlFactory csvCtrlFactory; //←ここを設定
+	
+	...
+</pre>
+
+次にファクトリクラスを利用して、csvコントローラクラスを取得します。
+<h5>書き出し時　例</h5>
+
+csvのWriteコントローラの生成
+<pre>
+Writer writer = new FileWriter("C:¥¥csv_exsample_out.csv");
+S2CSVWriteCtrl&lt;DeptCsv&gt; csv_writer = 
+	csvCtrlFactory.getWriteController(DeptCsv.class,writer);
+</pre>
+
+オブジェクトの書き出し
+<pre>
+DeptCsv deptCsv = new DeptCsv();
+
+//deptCsvの値設定
+...
+
+//CSV形式で書き出し
+csv_writer.write(deptCsv);
+</pre>
+
+書き出し終了後はcloseしてください。
+<pre>
+csv_writer.close();
+</pre>
+
+<h5>読み込み時　例</h5>
+csvのParseコントローラの生成
+<pre>
+Reader reader = new FileReader("C:¥¥csv_exsample_read.csv");
+
+S2CSVParseCtrl&lt;DeptCsv&gt; csv_parser = 
+	 csvCtrlFactory.getParseController(DeptCsv.class, reader);
+</pre>
+
+
+<h6>CSVの読み込み</h6>
+<pre>
+//次の行の読み込み
+while(csv_parser.readNext()){
+	//CSVデータからオブジェクトに変換して取得
+	DeptCsv deptCsv = csv_parser.parse();
+	
+	//deptCsvに対する処理
+	...
+}
+</pre>
+<p>
+終端まで達すると自動でcloseするので、
+最後まで読み込めた場合closeメソッドを呼び出す必要はありません。
+</p>
+
+<h6>バリデーション</h6>
+<p>
+上記例の場合、バリデーションエラーがあるとExceptionが発生します。
+バリデーションエラーをコントロールするにはExceptionをハンドルするか、
+先に自分でvalidateメソッドを呼び出して、ハンドルする必要があります。
+</p>
+
+バリデーションエラーのExceptionをハンドルする例
+<pre>
+while(csv_parser.readNext()){
+	 
+	 try{
+		 DeptCsv deptCsv = csv_parser.parse();
+		 
+		 //deptCsvに対する処理
+		 ...
+	 }catch(CSVValidationResultRuntimeException e){
+		 CSVValidateResult validateResult = e.getValidateResult();
+
+			//バリデーションエラー行
+			 System.out.println(validateResult.getLineNo());
+			 for(CSVMsg msg: validateResult.getMsgs()){
+				 //バリデーションエラーメッセージ
+				 System.out.println(msg);
+			 }
+	 }
+}
+</pre>
+
+validateメソッドを自分で呼び出す　例
+<pre>
+
+//parse時のバリデーションチェックをオフにして
+//自分でvalidateメソッドを呼ぶ
+csv_parser.setValidateFlag(false);
+
+while(csv_parser.readNext()){
+	 CSVValidateResult validateResult = csv_parser.validate();
+	 
+	 if(validateResult != null){
+		//バリデーションエラー行
+		 System.out.println(validateResult.getLineNo());
+		 for(CSVMsg msg: validateResult.getMsgs()){
+			 //バリデーションエラーメッセージ
+			 System.out.println(msg);
+		 }
+		 continue;
+	 }
+	 
+	 DeptCsv deptCsv = csv_parser.parse();
+	 //deptCsvに対する処理
+	 ...
+}
+</pre>
+
+
+<a name="exception"></a>
+<h4>例外</h4>
+<h5>CSVChangeException</h5>
+<p>
+CSVのデータからオブジェクト型への変換もしくは
+オブジェクト型からCSVのデータへの変換でエラーがあったとき発生します。
+通常はこのエラーが起きないようにバリデーションをします。
+</p>
+
+<h5>CSVValidationResultRuntimeException</h5>
+<p>
+parseコントローラでparseを行ったとき、
+バリデーションエラーが起こると発生します。
+バリデーションをチェックする処理の場合、
+このExceptionをハンドルするようにするか、
+自分でvalidateメソッドを呼んでからparse処理するかを選ぶことが出来ます。
+</p>
+
+<h5>CSVFormatException</h5>
+<p>
+CSVフォーマットが不正と分かった時点で発生します。
+不正分かった時点と言うのは、
+たとえば3行目に不正なフォーマットデータがあった場合、
+1行目、2行目は正常に処理され、
+3行目のパースを行ったときにこのExceptionが発生します。
+</p>
+
+<a name="util"></a>
+<h4>ユーティリティクラス</h4>
+汎用性は少ないですが、
+CSVデータを扱う上で利用するケースが多そうなロジックをユーティリティクラスのメソッドで
+いくつか用意してあるので紹介します。
+
+
+<h6>DBからの書き出し</h6>
+<pre>
+Writer writer = new FileWriter("C:¥¥csv_exsample_form_db.csv");
+S2CSVUtil.s2jdbcToCsv(DeptCsv.class, select(), writer);
+</pre>
+select()メソッドはS2AbstractServiceクラスのメソッドです。
+where区などを付加したものでも可能です。
+SQL実行した結果のデータ全てがCSVに出力されます。
+iterateで処理しているので大量データでも大丈夫なはずです。
+
+
+<h6>DBへ取り込み</h6>
+<pre>
+Reader reader = new FileReader("C:¥¥csv_exsample_read.csv");
+S2CSVUtil.csvToS2Jdbc(DeptCsv.class,Dept.class,reader);
+</pre>
+CSVデータを全てDBにinsertします。
+バリデーションは行いません。
+コンバートエラーが起こった場合、処理を中断してExceptionが発生します。
+
+
+<h6>DBへ取り込み2</h6>
+<pre>
+Reader reader = new FileReader("C:¥¥csv_exsample_read.csv");
+
+List&lt;CSVValidateResult&gt; result =
+	S2CSVUtil.csvValidateToS2Jdbc(DeptCsv.class,Dept.class,reader);
+
+for(CSVValidateResult validateResult :result){
+
+	//バリデーションエラー行
+	 System.out.println(validateResult.getLineNo());
+	 for(CSVMsg msg: validateResult.getMsgs()){
+		 //バリデーションエラーメッセージ
+		 System.out.println(msg);
+	 }
+}
+</pre>
+全部の行に対して処理を行います。
+バリデーションエラーがあった場合、insertしません。
+バリデーションエラーが無かったものはinsertされます。
+戻り値はバリデーションエラーのリストです。
+CSVフォーマットエラーもしくはCSVコンバートエラーが起きた場合
+処理を中断してExceptionが発生します。
+
+</div><!-- section -->
+
+</div><!-- article -->
+
+</div><!-- contents_center -->
+
+<div id="footer">
+<address>&copy; Copyright The Seasar Foundation and the others 2006, all rights reserved.</address>
+<div class="line"><span class="hide">spacer</span></div>
+</div><!-- footer -->
+
+</div><!-- wrapper -->
+
+</body>
+</html>
+
