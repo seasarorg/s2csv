@@ -8,6 +8,10 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.convertor.CSVColumnConvertor;
 
 
+/**
+ * S2Csvのカラムで使用されることを示すアノテーションです
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface CSVColumn  {
