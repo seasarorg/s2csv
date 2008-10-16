@@ -14,7 +14,7 @@ public class CSVDateConvertor implements CSVColumnConvertor {
 
 	private SimpleDateFormat format;
 	
-	protected String defaultPattern="yyyy/mm/dd" ;
+	protected String defaultPattern="yyyy/MM/dd" ;
 	
 	/**
 	 * 
