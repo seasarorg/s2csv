@@ -59,12 +59,14 @@
 		<ul> 
 			<li><a href="#project">プロジェクト構成</a></li>
 			<li><a href="#csvObjectClass">CSVオブジェクトクラス</a></li>
-			<li><a href="#annotation">CSVアノテーション</a></li>
-			<li><a href="#annotationList">CSVアノテーション一覧</a></li>
-			<li><a href="validation">CSVバリデーション</a></li>
-			<li><a href="implImage">実装イメージ</a></li>
-			<li><a href="exception">例外</a></li>
-			<li><a href="util">ユーティリティクラス</a></li>
+			<li><a href="#annotation">CSVアノテーションの必要最低限の設定</a></li>
+			<li><a href="#annotationFunc">CSVアノテーション機能</a></li>
+			<li><a href="#validation">CSVバリデーション</a></li>
+			<li><a href="#implImage">実装イメージ</a></li>
+			<li><a href="#exception">例外</a></li>
+			<li><a href="#util">ユーティリティクラス</a></li>
+			<li><a href="#msg">メッセージ</a></li>
+			<li><a href="#flow">処理の流れ</a></li>
 		</ul>
 	</li>
 </ul>
@@ -113,7 +115,7 @@ CSVエンティティクラスは、ルートパッケージ.csvに格納しま�
 </p>
 
 <a name="annotation"></a>
-<h4>CSVアノテーション</h4>
+<h4>CSVアノテーションの必要最低限の設定</h4>
 <p>
 CSVエンティティクラスには以下のアノテーションをつける必要があります。
 </p>
@@ -151,7 +153,7 @@ public class DeptCsv {
 }
 </pre>
 
-<a name="annotationList"></a>
+<a name="annotationFunc"></a>
 <h4>CSVアノテーション機能</h4>
 <h4>CSVエンティティにつけるアノテーション</h4>
 <h5>@CSVEntity</h5>
@@ -478,6 +480,83 @@ for(CSVValidateResult validateResult :result){
 戻り値はバリデーションエラーのリストです。
 CSVフォーマットエラーもしくはCSVコンバートエラーが起きた場合
 処理を中断してExceptionが発生します。
+
+
+<a name="msg"></a>
+<h4>メッセージ</h4>
+それぞれのバリデーションのアノテーションには
+msgKeyを設定する箇所がありますが、
+それに対応した、argsを設定するプロパティがあります。
+その値設定でいくつか特殊な設定値があります。
+
+<p>
+CSVMaxLengthを例にして紹介します。
+</p>
+<p>
+${var:maxlength}のように"{var:"の後に、変数名を指定し、
+"}"で閉じることで、アノテーションで設定された変数の値をメッセージの引数として利用できます。
+この表記のような文言をそのまま出力したい場合には$を重ねてエスケープできます。
+ここの例ではエスケープすると$${var:maxlength}となります。
+</p>
+<p>
+CSVのエラーメッセージを作成する際にはエラーの起きた行番号を出力したい場合があると思います。
+その際にはargsの値にCSVColumn.REPLACE_LINE_NOを指定すると、
+バリデーションエラーメッセージを作成する際そのエラー行番号に置き換えられます。
+</p>
+<p>
+CSVのエラーメッセージを作成する際にカラムの項目名を表示させたい項目があると思います。
+その際にはargsの値にCSVColumn.REPLACE_NAMEを指定すると
+バリデーションエラーメッセージを作成する際にはカラム名に置き換えられます。
+ヘッダ出力の名前と同じ用にカラム名はcolumnNameに指定された値かフィールド名になります。
+</p>
+
+
+<h4>メッセージリソース</h4>
+<p>
+アプリケーションで使うメッセージは、csv_application.propertiesに記述します。 
+csv_application.propertiesはクラスパスの通っているディレクトリにおきます。
+tutorialプロジェクトでは、src/main/resourcesに csv_application_ja.propertiesがあります。
+
+多言語対応する場合は、ロケールに応じて、csv_application_ja.propertiesなどを用意してください。 
+csv_applicationの部分は固定です。
+（diconファイルで変更できるようにする予定）
+</p>
+<p>
+csv_application.propertiesを日本語で編集するのには<a href="http://propedit.sourceforge.jp/">プロパティエディタ</a>を使うのが、
+お勧めです。
+</p>
+
+
+<a name="flow"></a>
+<h4>処理の流れ</h4>
+s2csvでは内部的には以下のような流れで処理を行っています。
+
+<h5>CSVデータ読み込み時</h5>
+<p>
+parse処理　（1データ分づつ取り出します。)<br/>
+↓<br/>
+カラムvalidate処理<br/>
+↓<br/>
+レコードvalidate処理(カラムvalidateでエラーが無いとき)<br/>
+↓<br/>
+コンバート処理 (文字列からオブジェクトに変換します)<br/>
+↓<br/>
+CSVオブジェクト設定<br/>
+</p>
+<br/>
+<h5>CSVデータ書き込み時</h5>
+<p>
+コンバート処理 (オブジェクトからに文字列変換します)<br/>
+↓<br/>
+(validate設定されているとき:デフォルトfalse)<br/>
+カラムvalidate処理<br/>
+↓<br/>
+(validate設定されているとき:デフォルトfalse)<br/>
+レコードvalidate処理(カラムvalidateでエラーが無いとき)<br/>
+↓<br/>
+CSVデータ書き込み<br/>
+</p>
+
 
 </div><!-- section -->
 
