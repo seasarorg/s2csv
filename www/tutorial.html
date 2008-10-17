@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta name="keywords" content="s2csv, Seasar, The Seasar Project, The Seasar Foundation, OSS, Open Source Software, Java, Framework" />
 <meta name="description" content="s2csv" />
-<title>s2csv - Release Notes</title>
+<title>s2csv - Tutorial</title>
 <link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/main.css" media="screen,projection" />
 <link rel="stylesheet" type="text/css" href="http://www.seasar.org/theme/print.css" media="print" />
 </head>
@@ -67,9 +67,51 @@
 
 <div class="section">
 
-<h2>リリースノート S2Csv</h2>
+<h2>チュートリアル</h2>
+<p>
+チュートリアルプロジェクトはDBを使用しています。
+DbLauncherプラグインをSeasarのプラグインページからダウンロードして、
+H2のデータベースを起動して下さい。
+</p>
 
-鋭意作成中。
+<h4>実行</h4>
+<p>
+DeptExample.java
+EmpExample.java
+にはmainメソッドが用意されています。
+それぞれ実行することが出来ます。
+</p>
+
+<h5>
+DeptExampleはCSVデータの基本操作サンプルです。
+</h5>
+<p>
+それぞれ用意された色々な書き方で、
+deptテーブルのデータを書き換えたり、出力したりしています。
+CSVの実際の操作ソースはDeptService.javaにあります。
+</p>
+<p>
+CSVオブジェクト定義はDeptCsv.javaになります。
+</p>
+<h5>
+EmpExampleはCSVデータのバリデーションのサンプルです。
+</h5>
+<p>
+それぞれ用意された色々なデータを読み込み、、
+バリデーション結果をコンソールに出力しています。
+CSVの実際の操作ソースはEmpService.javaにあります。
+</p>
+<p>
+CSVオブジェクト定義はEmpCsv.javaになります。
+</p>
+
+
+<h4>要望</h4>
+<p>
+ほかに、このようなチュートリアルが欲しいなどの要望がありましたら、
+S2Csvのトップの連絡先から直接連絡いただくか、
+Seasar-userメーリングリストに連絡いただければ幸いです。
+</p>
 
 </div><!-- section -->
 
