@@ -166,20 +166,20 @@ true:ヘッダあり(デフォルト) false:ヘッダなし
 trueにした場合、CSVデータ読み込み時には１行目はデータとして読み込まれません。
 CSVデータ書き出し時にはヘッダ行が付加されるようになります。
 
-<h6>columnCount(オプション)<font color="red">(予定)</font></h6>
-カラムの数を指定します。(デフォルト:0)
-0以下の場合、CSVColumnで設定された最大値がカラム数として使用されます。
 
-<h6>headerCheck(オプション)<font color="red">(予定)</font></h6>
+<h6>headerCheck(オプション)</h6>
 ヘッダ行の名称が登録されているデータと同じであるかをチェックします。(デフォルト:false)
 エラーの場合、CSVFormatExceptionが発生します。
 このフラグはheaderオプションがtrueのときのみ有効です。
 
 
-<h6>columnCountCheck(オプション)<font color="red">(予定)</font></h6>
-行のカラム数が設定したカラム数と同じになるかチェックします。(デフォルト:false)
+<h6>columnCountCheck(オプション)</h6>
+行のカラム数が設定したカラム数と同じになるかチェックします。(デフォルト:true)
 エラーの場合、CSVFormatExceptionが発生します。
+ここの値がfalseの場合、足らなかったカラムの項目はデータなしとして処理されます。
 
+<h6>demiliter(オプション)</h6>
+CSVの区切り文字を指定します。(デフォルト:',')
 
 <h4>CSVカラムフィールドにつけるアノテーション</h4>
 <h5>@CSVColumn</h5>
