@@ -102,10 +102,17 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 		}
 
 		conf.setHeader(entityConf.header());
+		if(entityConf.header() && entityConf.headerCheck()){
+			conf.setCheckHeader(true);
+		}else{
+			conf.setCheckHeader(false);
+		}
 		conf.setHeaderNames(header.toArray(new String[0]));
 		conf.setFieldNames(fieldNames.toArray(new String[0]));
 		conf.setColmunSize(conf.getHeaderNames().length);
 		conf.setColumnConfigs(columnsDesc);
+		conf.setCheckColumnSize(entityConf.columnCountCheck());
+		conf.setDemiliter(entityConf.demiliter());
 		
 		return conf;
 	}

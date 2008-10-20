@@ -10,6 +10,9 @@ import org.seasar.s2csv.csv.util.S2CSVDescUtil;
 
 import test.csv.TestCsv;
 
+/**
+ * @author newta
+ */
 public class TestCSVErrExec extends S2CSVTestBase {
 
 	static String csvComma1Data =
@@ -18,13 +21,14 @@ public class TestCSVErrExec extends S2CSVTestBase {
 		"hoge,hhhm,112,,,,20\090408\r\n";
 	
 	static String csvComma2Data =
-		"ヘッダ\r\n" +
-		"hogehoge,hoe2,10,2008/01/04\r\n" +
+		"ヘッダ,,,,,,\r\n" +
+		"hogehoge,hoe2,10,2008/01/04,,,\r\n" +
 		"hoge,hhhm,112,,,,20\"090408\r\n";
 	
     
+	/** */
     @Test
-    public void testAAAA(){
+    public void testHeaderRecordFormatError(){
 
 		StringReader sr = new StringReader(csvComma1Data);
 		
@@ -35,20 +39,59 @@ public class TestCSVErrExec extends S2CSVTestBase {
 			
 			while (sp.isNext()) {
 				sp.nextLine();
-				System.out.println("---");
-				System.out.println(sp.getCurrentLineNo());
-				System.out.println(sp.getCurrentLine());
 			}
 			
 			fail();
 		}catch(CSVFormatException e){
-			assertEquals(0 ,e.getErrorLineNo());
+			assertEquals(1 ,e.getErrorLineNo());
 			assertEquals("ESCSV0009" ,e.getMessageCode());
 		}
     }
 
+	/** */
     @Test
-    public void testAAAB(){
+    public void testHeaderCountError(){
+
+		StringReader sr = new StringReader("へっだ,");
+
+		try{
+		
+			CSVParser sp =
+			new DefaultCSVParser(sr,S2CSVDescUtil.getCSVEntityDesc(TestCsv.class));
+			
+			while (sp.isNext()) {
+				sp.nextLine();
+			}
+		}catch(CSVFormatException e){
+			assertEquals(1 ,e.getErrorLineNo());
+			assertEquals("ESCSV0009" ,e.getMessageCode());
+		}
+    }
+
+	/** */
+    @Test
+    public void testColumnCountError(){
+
+		StringReader sr = new StringReader("ヘッダ,,,,,,\r\n" +
+				"a,b,c");
+
+		try{
+		
+			CSVParser sp =
+			new DefaultCSVParser(sr,S2CSVDescUtil.getCSVEntityDesc(TestCsv.class));
+			
+			while (sp.isNext()) {
+				sp.nextLine();
+			}
+		}catch(CSVFormatException e){
+			assertEquals(2 ,e.getErrorLineNo());
+			assertEquals("ESCSV0009" ,e.getMessageCode());
+		}
+    }
+
+	/** */
+    @Test
+    public void testNoEndOfQuoteError(){
 
 		StringReader sr = new StringReader(csvComma2Data);
 
@@ -59,12 +102,9 @@ public class TestCSVErrExec extends S2CSVTestBase {
 			
 			while (sp.isNext()) {
 				sp.nextLine();
-				System.out.println("---");
-				System.out.println(sp.getCurrentLineNo());
-				System.out.println(sp.getCurrentLine());
 			}
 		}catch(CSVFormatException e){
-			assertEquals(2 ,e.getErrorLineNo());
+			assertEquals(3 ,e.getErrorLineNo());
 			assertEquals("ESCSV0009" ,e.getMessageCode());
 		}
     }

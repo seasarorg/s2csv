@@ -18,30 +18,45 @@ public class CSVValidateResult {
 	/** バリデーションメッセージ */
 	private List<CSVMsg> msgs = new ArrayList<CSVMsg>();
 	
+	/**
+	 * @return lineNo
+	 */
 	public long getLineNo() {
 		return lineNo;
 	}
-
+	/**
+	 * @param lineNo
+	 */
 	public void setLineNo(long lineNo) {
 		this.lineNo = lineNo;
 	}
-
+	/**
+	 * @return data
+	 */
 	public String[] getData() {
 		return data;
 	}
-
+	/**
+	 * @param data
+	 */
 	public void setData(String[] data) {
 		this.data = data;
 	}
-
+	/**
+	 * @return msgs
+	 */
 	public List<CSVMsg> getMsgs() {
 		return msgs;
 	}
-
+	/**
+	 * @param msgs
+	 */
 	public void setMsgs(List<CSVMsg> msgs) {
 		this.msgs = msgs;
 	}
-
+	/**
+	 * @return data
+	 */
 	public String dataToString(){
 		StringBuilder sb = new StringBuilder();
 		for(String tmp: data){

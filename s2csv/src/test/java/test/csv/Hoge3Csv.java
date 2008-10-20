@@ -11,41 +11,46 @@ import test.ano.CSVKeyCheck;
 import test.entity.Dept;
 import test.service.DeptService;
 
-@CSVEntity(header=false)
+/** */
+@CSVEntity(header=false,columnCountCheck=false)
 @CSVRecordValidator(msgKey="errors.recordcheck",method="recordCheck")
 @CSVKeyCheck()
 public class Hoge3Csv {
-
+	/** */
 	public DeptService deptService;
-	
+	/** */
 	@CSVRequired
 	@CSVColumn(columnIndex=0)
 	@CSVValidator(msgKey="errors.dept",method="deptValidate")
 	public String a;
-	
+	/** */
 	@CSVMaxLength(maxlength=10)
 	@CSVColumn(columnIndex=1)
 	public String b;
 	
-	
+	/**
+	 * @param column_a_data 
+	 * @return result */
 	public boolean deptValidate(String column_a_data){
 		
 		Dept dept = deptService.findById(Long.valueOf(1));
 		
-		System.out.println(dept);
+		System.out.println("Dept Checked[" + dept + "]");
 		
 		return true;
 	}
-	
+	/**
+	 * @param columns 
+	 * @return result */
 	public boolean checkKeys(String[] columns){
-		System.out.println("keyCheck");
+		System.out.println("Record Checked (checkKeys)");
 		return false;
 	}
-	
+	/**
+	 * @param columns 
+	 * @return result */
 	public boolean recordCheck(String[] columns){
-		
-		System.out.println(columns);
-		
+		System.out.println("Record Checked (recordCheck)");
 		return false;
 	}
 }

@@ -8,6 +8,9 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(msgKey="",
@@ -16,12 +19,13 @@ import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 		methodArgsNames={"minbytelength","charset"}
 		)
 public @interface CSVMinByteLength {
-	
-	String msgKey() default "errors.minbytelength";
-	
-	String[] args() default {};
-	
-	int minbytelength();
 
+	/** メッセージキー */
+	String msgKey() default "errors.minbytelength";
+	/** メッセージ引数 */
+	String[] args() default {CSVColumn.REPLACE_NAME,"${var:minbytelength}"};
+	/** 最小バイト数 */
+	int minbytelength();
+	/** 文字コード */
 	String charset() default "";
 }

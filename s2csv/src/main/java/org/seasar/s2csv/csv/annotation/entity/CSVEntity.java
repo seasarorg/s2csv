@@ -17,15 +17,12 @@ public @interface CSVEntity {
 	/** ヘッダ true:あり false:なし */
 	boolean header() default true;
 	
-	//TODO 処理を追加する
 	/** CSVColumnの名前と同じかチェックする(validate時) */
-	boolean headerCheck() default true;
+	boolean headerCheck() default false;
 	
-	//TODO 処理を追加する
-	/** カラムの個数を指定する(0はCSVColumnの最大値 1以上の場合、validate時カラム数チェック) */
-	int columnCount() default 0;
-	
-	//TODO　処理を追加する
 	/** true時、カラムの個数をチェックします */
-	boolean columnCountCheck() default false;
+	boolean columnCountCheck() default true;
+	
+	/** カラム区切り文字 */
+	char demiliter() default ',';
 }

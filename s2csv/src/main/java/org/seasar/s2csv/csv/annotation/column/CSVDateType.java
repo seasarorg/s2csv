@@ -8,6 +8,9 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(msgKey="",method="validateDateType",
@@ -15,9 +18,10 @@ import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 		methodArgsNames={"datePattern","datePatternStrict"}
 		)
 public @interface CSVDateType {
-	
+
+	/** メッセージキー */
 	String msgKey() default "errors.date";
-	
+	/** メッセージ引数 */
 	String[] args() default {CSVColumn.REPLACE_NAME};
 
     /** 日付形式チェックパターン  */

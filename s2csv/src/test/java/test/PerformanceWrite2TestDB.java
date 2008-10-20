@@ -15,10 +15,16 @@ import test.csv.ApartmentCsv;
 import test.entity.Apartment;
 import test.service.ApartmentService;
 
+/**
+ * 
+ * @author newta
+ *
+ */
 public class PerformanceWrite2TestDB extends S2CSVTestBase {
 
 	private DateFormat f = DateFormat.getTimeInstance(DateFormat.LONG);
 	
+	/** */
 	@Test
 	public void testConnection(){
 
@@ -32,6 +38,7 @@ public class PerformanceWrite2TestDB extends S2CSVTestBase {
 		System.out.println(a);
 		time_end();
 	}
+	/** */
 	@Test
 	public void testList(){
 
@@ -49,15 +56,21 @@ public class PerformanceWrite2TestDB extends S2CSVTestBase {
 		time_end();
 	}
 
+	/** */
 	@Test
-	public void testWrite10000_1() throws IOException{
+	public void testWrite10000_1() {
 		//結果 :7秒  h2 to csv  
 		System.out.println("■testWrite10000");
 		ApartmentService service = 
 			SingletonS2Container.getComponent(ApartmentService.class);
 		
 		
-		FileWriter writer = new FileWriter("C:\\csv_write2_test10000.csv");
+		FileWriter writer;
+		try {
+			writer = new FileWriter("C:\\csv_write2_test10000.csv");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		
 		time_start();
 		Select<Apartment,?> select = service.select().limit(10000);

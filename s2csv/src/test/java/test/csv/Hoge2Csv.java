@@ -9,23 +9,25 @@ import org.seasar.s2csv.csv.annotation.entity.CSVRecordValidator;
 
 import test.entity.Dept;
 import test.service.DeptService;
-
-@CSVEntity(header=false)
+/** */
+@CSVEntity(header=false,columnCountCheck=false)
 @CSVRecordValidator(msgKey="errors.recordcheck",method="recordCheck")
 public class Hoge2Csv {
-
+	/** */
 	public DeptService deptService;
-	
+	/** */
 	@CSVRequired
 	@CSVColumn(columnIndex=0)
 	@CSVValidator(msgKey="errors.dept",method="deptValidate")
 	public String a;
-	
+	/** */
 	@CSVMaxLength(maxlength=10)
 	@CSVColumn(columnIndex=1)
 	public String b;
 	
-	
+	/**
+	 * @param column_a_data 
+	 * @return result */
 	public boolean deptValidate(String column_a_data){
 		
 		Dept dept = deptService.findById(Long.valueOf(1));
@@ -34,7 +36,9 @@ public class Hoge2Csv {
 		
 		return true;
 	}
-	
+	/**
+	 * @param columns 
+	 * @return result */
 	public boolean recordCheck(String[] columns){
 		
 		System.out.println(columns);

@@ -22,27 +22,51 @@ public class CSVConvertDesc {
 	/** コンバータクラスをインスタンス化するときに設定するプロパティ */
 	private Map<PropertyDesc,String> convClassProps;
 	
+	/**
+	 * @return convClass
+	 */
 	public Class<?> getConvClass() {
 		return convClass;
 	}
+	/**
+	 * @param convClass
+	 */
 	public void setConvClass(Class<?> convClass) {
 		this.convClass = convClass;
 	}
+	/**
+	 * @return convToObjMethod
+	 */
 	public Method getConvToObjMethod() {
 		return convToObjMethod;
 	}
+	/**
+	 * @param convToObjMethod
+	 */
 	public void setConvToObjMethod(Method convToObjMethod) {
 		this.convToObjMethod = convToObjMethod;
 	}
+	/**
+	 * @return convToCSVMethod
+	 */
 	public Method getConvToCSVMethod() {
 		return convToCSVMethod;
 	}
+	/**
+	 * @param convToCSVMethod
+	 */
 	public void setConvToCSVMethod(Method convToCSVMethod) {
 		this.convToCSVMethod = convToCSVMethod;
 	}
+	/**
+	 * @return convClassProps
+	 */
 	public Map<PropertyDesc, String> getConvClassProps() {
 		return convClassProps;
 	}
+	/**
+	 * @param convClassProps 
+	 */
 	public void setConvClassProps(Map<PropertyDesc, String> convClassProps) {
 		this.convClassProps = convClassProps;
 	}

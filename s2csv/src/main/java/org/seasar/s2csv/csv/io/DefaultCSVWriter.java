@@ -50,7 +50,7 @@ public class DefaultCSVWriter implements CSVWriter {
 					CSVColumnDesc colDesc = csvDesc.getColumnConfigs().get(i);
 					
 					if(i != 0){
-						writer.write(",");
+						writer.write(csvDesc.getDemiliter());
 					}
 					
 					if(col == null || col.length() == 0){
@@ -97,7 +97,7 @@ public class DefaultCSVWriter implements CSVWriter {
 			return true;
 		}
 
-		if(col.indexOf(",") >= 0){
+		if(col.indexOf(csvDesc.getDemiliter()) >= 0){
 			return true;
 		}
 

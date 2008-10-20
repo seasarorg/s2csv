@@ -8,6 +8,9 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(msgKey="",
@@ -16,10 +19,11 @@ import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 		methodArgsNames="maxlength"
 		)
 public @interface CSVMaxLength {
-	
+
+	/** メッセージキー */
 	String msgKey() default "errors.maxlength";
-	
+	/** メッセージ引数 */
 	String[] args() default {CSVColumn.REPLACE_NAME,"${var:maxlength}"};
-	
+	/** 最大文字数 */
 	int maxlength();
 }

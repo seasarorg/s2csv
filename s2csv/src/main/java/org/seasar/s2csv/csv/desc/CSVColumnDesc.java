@@ -11,6 +11,7 @@ import org.seasar.s2csv.csv.annotation.column.CSVColumn;
  */
 public class CSVColumnDesc {
 
+	//TODO このアノテーションはそのうちこのクラスからは追い出す。
 	private CSVColumn csvColumn;
 	
 	private PropertyDesc columnDesc;

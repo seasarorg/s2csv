@@ -8,12 +8,16 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(msgKey="",method="validateEmailType", methodClass=CSVColumnChecks.class)
 public @interface CSVEmailType {
 
+	/** メッセージキー */
 	String msgKey() default "errors.email";
-	
+	/** メッセージ引数 */
 	String[] args() default {CSVColumn.REPLACE_NAME};
 }

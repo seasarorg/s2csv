@@ -8,6 +8,9 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(msgKey="",
@@ -17,9 +20,11 @@ import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 		)
 public @interface CSVMask {
 
+	/** メッセージキー */
 	String msgKey() default "errors.invalid";
+	/** メッセージ引数 */
+	String[] args() default {CSVColumn.REPLACE_NAME};
 	
-	String[] args() default {};
-	
+	/** */
 	String mask();
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.junit.Test;
 import org.seasar.extension.unit.S2TestCase;
-
+/** */
 public class AutoExpandListTest extends S2TestCase {
-
+	/** */
 	@Test
 	public void testSet(){
 		
@@ -29,7 +29,7 @@ public class AutoExpandListTest extends S2TestCase {
 			}
 		}
 	}
-
+	/** */
 	@Test
 	public void testAdd(){
 

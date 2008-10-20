@@ -9,6 +9,7 @@ import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.s2csv.csv.S2CSVParseCtrl;
 import org.seasar.s2csv.csv.convertor.CSVConvertCtrl;
 import org.seasar.s2csv.csv.desc.CSVEntityDesc;
+import org.seasar.s2csv.csv.exception.CSVFormatException;
 import org.seasar.s2csv.csv.exception.runtime.CSVValidationResultException;
 import org.seasar.s2csv.csv.exception.runtime.CSVValidationResultRuntimeException;
 import org.seasar.s2csv.csv.io.CSVParser;
@@ -59,8 +60,32 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 	}
 
 	public boolean readNext() {
+		
+		boolean tmpHeaderCheck = false;
+		if(!next && csvEntityDesc.isCheckHeader()){
+			//まだ1回も読んでないとき
+			tmpHeaderCheck = true;
+		}
+		
 		next = parser.isNext();
+		
 		if(next){
+			
+			if(tmpHeaderCheck){
+				//ヘッダ文字列が同じかチェックする
+				int hedLength = csvEntityDesc.getHeaderNames().length;
+				String[] heders = parser.getHeader();
+				for(int i =0;i<hedLength;i++){
+					
+					String hed1 = csvEntityDesc.getHeaderNames()[i];
+					String hed2 = heders[i];
+					
+					if(hed1.equals(hed2) == false){
+						throw new CSVFormatException(1);
+					}
+				}
+			}
+			
 			currentLine = parser.nextLine();
 			currentNo = parser.getCurrentLineNo();
 		}else{
@@ -82,7 +107,6 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 							.getComponent(csvEntityDesc.getEntityClass());
 		
 		if(validateFlag){
-			
 			CSVValidateResult valRes = 
 				this.validateLine(entity , currentLine, currentNo);
 			

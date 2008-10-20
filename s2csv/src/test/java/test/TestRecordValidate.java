@@ -12,7 +12,10 @@ import org.seasar.s2csv.csv.validator.CSVValidateResult;
 import test.csv.Hoge2Csv;
 import test.csv.Hoge3Csv;
 
-public class RecordValidateTestDB extends S2CSVTestBase {
+/**
+ * @author newta
+ */
+public class TestRecordValidate extends S2CSVTestBase {
 	
 	static String csvData =
 		"ヘッダ\r\n" +
@@ -25,6 +28,7 @@ public class RecordValidateTestDB extends S2CSVTestBase {
 		"\r\n" +
 		"hoge,hhhm,112,,a,ccccc,20090408\r\n";
     
+	/** */
     @Test
     public void testRecordVaildate(){
 
@@ -35,7 +39,6 @@ public class RecordValidateTestDB extends S2CSVTestBase {
 		S2CSVParseCtrl<Hoge2Csv> sp = factory.getParseController(Hoge2Csv.class,sr);
 		
 		while (sp.readNext()) {
-			System.out.println("---");
 			CSVValidateResult vr = sp.validate();
 			if(vr != null){
 				for(CSVMsg msg : vr.getMsgs()){
@@ -47,7 +50,7 @@ public class RecordValidateTestDB extends S2CSVTestBase {
 			}
 		}
     }
-
+    /** */
     @Test
     public void testRecordVaildateAno(){
 
@@ -56,7 +59,6 @@ public class RecordValidateTestDB extends S2CSVTestBase {
 		S2CSVParseCtrl<Hoge3Csv> sp = S2CSVUtil.getCSVCtrlFactory().getParseController(Hoge3Csv.class,sr);
 		
 		while (sp.readNext()) {
-			System.out.println("---");
 			CSVValidateResult vr = sp.validate();
 			if(vr != null){
 				boolean f = true;

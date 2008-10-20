@@ -2,9 +2,9 @@ package org.seasar.s2csv.annotation;
 
 import org.junit.Test;
 import org.seasar.extension.unit.S2TestCase;
-
+/** */
 public class DefaultAnnotationProxyTest extends S2TestCase {
-
+	/** */
 	@Test
 	public void testDefaultAnnotationProxy(){
 		

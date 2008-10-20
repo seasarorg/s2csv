@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.seasar.extension.unit.S2TestCase;
-
+/** */
 public class CSVAnnotationUtilTest extends S2TestCase {
-	
+	/** */
 	@Test
 	public void testGetProps(){
 		

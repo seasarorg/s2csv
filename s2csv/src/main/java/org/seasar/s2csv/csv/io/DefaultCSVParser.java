@@ -24,7 +24,7 @@ public class DefaultCSVParser implements CSVParser {
 	private boolean nextRead;
 	private long lineNo;
 	
-	private CSVEntityDesc csvConf;
+	private CSVEntityDesc csvDesc;
 
 	//parseメソッド内でしか使用しないが、
 	//newを減らすためにキープしてしまう。
@@ -39,7 +39,7 @@ public class DefaultCSVParser implements CSVParser {
 	public DefaultCSVParser(Reader reader, CSVEntityDesc csvConf){
 		
 		this.reader =  new LineNumberReader(reader);
-		this.csvConf = csvConf;
+		this.csvDesc = csvConf;
 		
 		this.sb = new StringBuilder();
 
@@ -72,7 +72,7 @@ public class DefaultCSVParser implements CSVParser {
 	}
 
 	public String[] getHeader() {
-		return csvConf.getHeaderNames();
+		return csvDesc.getHeaderNames();
 	}
 
 	public boolean isNext() {
@@ -114,7 +114,7 @@ public class DefaultCSVParser implements CSVParser {
 				}
 			}while(line.length() == 0);
 
-			String[] cols = parse(line, csvConf.getColmunSize(), lineNo);
+			String[] cols = parse(line, csvDesc.getColmunSize(), lineNo);
 			return cols;
 			
 		} catch (IOException e) {
@@ -141,6 +141,8 @@ public class DefaultCSVParser implements CSVParser {
 			if(lineSize == p){
 				if(!quoteState){
 					cols[colIndex] = sb.toString();
+
+					colIndex++;
 					break;
 				}else{
 					sb.append("\n");
@@ -149,7 +151,8 @@ public class DefaultCSVParser implements CSVParser {
 						throw new CSVFormatException(lineNo);
 					}
 					
-					lineNo = reader.getLineNumber();
+					//読み込み先頭行をエラー行として出す
+					//lineNo = reader.getLineNumber();
 					p=0;
 					lineSize = line.length();
 					
@@ -163,7 +166,7 @@ public class DefaultCSVParser implements CSVParser {
 			p++;
 			
 			if(!quoteState){
-				if( c == ',' ) {
+				if( c == csvDesc.getDemiliter() ) {
 					cols[colIndex] = sb.toString();
 					sb.delete(0, sb.length());
 					
@@ -206,6 +209,10 @@ public class DefaultCSVParser implements CSVParser {
 				
 				sb.append(c);
 			}	
+		}
+		
+		if(csvDesc.isCheckColumnSize() && colIndex != size){
+			throw new CSVFormatException(lineNo);
 		}
 		
 		return cols;

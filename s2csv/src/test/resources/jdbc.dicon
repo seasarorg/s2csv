@@ -28,7 +28,7 @@
 			"org.h2.Driver"
 		</property>
 		<property name="URL">
-			"jdbc:h2:tcp://localhost:9092/demo"
+			"jdbc:h2:tcp://localhost:9093/demo"
 		</property>
 		<property name="user">"sa"</property>
 		<property name="password">""</property>

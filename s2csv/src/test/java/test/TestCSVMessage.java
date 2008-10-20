@@ -9,10 +9,14 @@ import org.seasar.s2csv.csv.validator.CSVValidateResult;
 
 import test.csv.AAACsv;
 
+/**
+ * @author newta
+ */
 public class TestCSVMessage extends S2CSVTestBase {
 
 	private String csvOKData = "20\r\n30\r\n";
 	
+	/** */
 	@Test
 	public void testRangeMsg(){
 		
@@ -24,9 +28,9 @@ public class TestCSVMessage extends S2CSVTestBase {
 		while(pc.readNext()){
 			CSVValidateResult r = pc.validate();
 			
-			System.out.println(r);
+			String msg = r.getMsgs().get(0).toString();
 			
-			System.out.println(r.getMsgs().get(0));
+			assertEquals(msg,"a に範囲外の値が指定されています。0 から 10 の値を入力してください。");
 		}
 	}
 }

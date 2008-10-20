@@ -8,6 +8,11 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * 
+ * @author newta
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(
@@ -15,7 +20,8 @@ import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 		method="validateByteType", methodClass=CSVColumnChecks.class)
 public @interface CSVByteType {
 
+	/** メッセージキー */
 	String msgKey() default "errors.byte";
-	
+	/** メッセージ引数 */
 	String[] args() default {CSVColumn.REPLACE_NAME};
 }

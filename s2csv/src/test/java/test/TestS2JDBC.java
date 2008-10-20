@@ -1,6 +1,5 @@
 package test;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -12,13 +11,17 @@ import test.csv.DeptCsv;
 import test.entity.Dept;
 import test.service.DeptService;
 
-
+/**
+ * @author newta
+ */
 public class TestS2JDBC extends S2CSVTestBase {
 
+	/** */
 	public DeptService deptService;
-	
+
+	/** */
 	@Test
-	public void testHoge() throws IOException{
+	public void testS2jdbcToCsv(){
 		
 		AutoSelect<Dept> select = deptService.select();
 		

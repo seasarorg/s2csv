@@ -7,7 +7,9 @@ import java.lang.annotation.Target;
 
 import org.seasar.s2csv.csv.convertor.CSVColumnConvertor;
 
-
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface CSVConvertor  {

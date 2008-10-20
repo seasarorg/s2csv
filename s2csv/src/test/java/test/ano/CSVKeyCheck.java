@@ -7,12 +7,13 @@ import java.lang.annotation.Target;
 
 import org.seasar.s2csv.csv.annotation.entity.CSVRecordValidator;
 
+/** */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @CSVRecordValidator(msgKey="", method="checkKeys")
 public @interface CSVKeyCheck {
-
+	/** */
 	String msgKey() default "errors.recordcheck2";
-	
+	/** */
 	String[] args() default {};
 }

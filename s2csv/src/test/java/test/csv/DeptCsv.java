@@ -2,7 +2,7 @@ package test.csv;
 
 import org.seasar.s2csv.csv.annotation.column.CSVColumn;
 import org.seasar.s2csv.csv.annotation.entity.CSVEntity;
-
+/** */
 @CSVEntity(header=true)
 public class DeptCsv {
 

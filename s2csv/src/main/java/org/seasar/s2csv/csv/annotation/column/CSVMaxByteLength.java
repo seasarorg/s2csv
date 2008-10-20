@@ -8,6 +8,9 @@ import java.lang.annotation.Target;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 
+/**
+ * @author newta
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @CSVValidator(msgKey="",
@@ -16,12 +19,13 @@ import org.seasar.s2csv.csv.validator.CSVColumnChecks;
 		methodArgsNames={"maxbytelength","charset"}
 		)
 public @interface CSVMaxByteLength {
-	
-	String msgKey() default "errors.maxbytelength";
-	
-	String[] args() default {CSVColumn.REPLACE_NAME,"${var:maxbytelength}"};
-	
-	int maxbytelength();
 
+	/** メッセージキー */
+	String msgKey() default "errors.maxbytelength";
+	/** メッセージ引数 */
+	String[] args() default {CSVColumn.REPLACE_NAME,"${var:maxbytelength}"};
+	/** 最大バイト数 */
+	int maxbytelength();
+	/** 文字コード */
 	String charset() default "";
 }

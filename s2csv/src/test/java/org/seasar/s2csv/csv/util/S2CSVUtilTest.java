@@ -5,9 +5,9 @@ import org.seasar.s2csv.csv.desc.CSVEntityDesc;
 
 import test.S2CSVTestBase;
 import test.csv.TestCsv;
-
+/** */
 public class S2CSVUtilTest extends S2CSVTestBase {
-
+	/** */
 	@Test
 	public void testCreateCSVEntityDesc(){
 		

@@ -30,8 +30,13 @@ public class CSVColumnChecks {
 	}
 	
 	//TODO Validwhen 作るのは気が向いたらで。
-
+	
 //	Minlength 
+	/**
+	 * @param value 
+	 * @param minlength 
+	 * @return 結果
+	 */
 	public static boolean validateMinLength(String value, int minlength) {
 		
 		if (!isBlank(value)){
@@ -49,6 +54,11 @@ public class CSVColumnChecks {
 	}
 	
 //	Maxlength
+	/**
+	 * @param value 
+	 * @param maxlength 
+	 * @return 結果
+	 */
 	public static boolean validateMaxLength(String value, int maxlength) {
 		
 		if (!isBlank(value)){
@@ -66,6 +76,12 @@ public class CSVColumnChecks {
 	}
 
 	// Minbytelength
+	/**
+	 * @param value 
+	 * @param minbytelength 
+	 * @param charset 
+	 * @return 結果
+	 */
 	public static boolean validateMinbytelength(String value, int minbytelength,String charset) {
 		
 		if (!isBlank(value)){
@@ -79,6 +95,12 @@ public class CSVColumnChecks {
 	}
 
 	// Maxbytelength
+	/**
+	 * @param value 
+	 * @param maxbytelength 
+	 * @param charset 
+	 * @return 結果
+	 */
 	public static boolean validateMaxbytelength(String value, int maxbytelength,String charset) {
 		
 		if (!isBlank(value)){
@@ -92,6 +114,11 @@ public class CSVColumnChecks {
 	}
 
 	// Mask
+	/**
+	 * @param value 
+	 * @param mask 
+	 * @return 結果
+	 */
 	public static boolean validateMask(String value,String mask) {
 		
 		if (!isBlank(value)){
@@ -112,6 +139,12 @@ public class CSVColumnChecks {
 	}
 	
 	// IntRange
+	/**
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean validateIntRange(String value,int min,int max){
 		
 		if(!isBlank(value)){
@@ -130,6 +163,12 @@ public class CSVColumnChecks {
 	}
 
 	// LongRange
+	/**
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean validateLongRange(String value,long min,long max){
 		
 		if(!isBlank(value)){
@@ -148,6 +187,12 @@ public class CSVColumnChecks {
 	}
 	
 	// FloatRange
+	/**
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean validateFloatRange(String value,float min,float max){
 		
 		if(!isBlank(value)){
@@ -167,6 +212,12 @@ public class CSVColumnChecks {
 
 
 	// DoubleRange
+	/**
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean validateDoubleRange(String value,double min,double max){
 		
 		if(!isBlank(value)){
@@ -186,6 +237,10 @@ public class CSVColumnChecks {
 	
 
 	// ByteType
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
 	public static boolean validateByteType(String value){
 
 		if(!isBlank(value)){
@@ -209,6 +264,10 @@ public class CSVColumnChecks {
 	}
 	
 	// ShortType
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
 	public static boolean validateShortType(String value){
 
 		if(!isBlank(value)){
@@ -232,6 +291,10 @@ public class CSVColumnChecks {
 	}
 
 	// IntegerType
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
 	public static boolean validateIntegerType(String value){
 
 		if(!isBlank(value)){
@@ -255,6 +318,10 @@ public class CSVColumnChecks {
 	}
 
 	//	LongType 
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
 	public static boolean validateLongType(String value){
 
 		if(!isBlank(value)){
@@ -279,6 +346,10 @@ public class CSVColumnChecks {
 	
 
 //	FloatType 
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
 	public static boolean validateFloatType(String value){
 
 		if(!isBlank(value)){
@@ -302,6 +373,10 @@ public class CSVColumnChecks {
 	}
 
 //	DoubleType 
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
 	public static boolean validateDoubleType(String value){
 
 		if(!isBlank(value)){
@@ -325,6 +400,12 @@ public class CSVColumnChecks {
 	}
 	
 	// DateType 
+	/**
+	 * @param value 
+	 * @param datePattern 
+	 * @param datePatternStrict 
+	 * @return 結果
+	 */
 	public static boolean validateDateType(String value,String datePattern,String datePatternStrict ){
 
 		if(!isBlank(value)){
@@ -389,23 +470,55 @@ public class CSVColumnChecks {
 
 	/**
 	 * 範囲チェック
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
 	 */
 	public static boolean isRangeCheck(int value, int min, int max)
     {
 		return value >= min && value <= max;
     }
+	/**
+	 * 範囲チェック
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean isRangeCheck(long value, long min, long max)
     {
 		return value >= min && value <= max;
     }
+	/**
+	 * 範囲チェック
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean isRangeCheck(float value, float min, float max)
     {
 		return value >= min && value <= max;
     }
+	/**
+	 * 範囲チェック
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean isRangeCheck(short value, short min, short max)
     {
 		return value >= min && value <= max;
     }
+	/**
+	 * 範囲チェック
+	 * @param value 
+	 * @param min 
+	 * @param max 
+	 * @return 結果
+	 */
 	public static boolean isRangeCheck(double value, double min, double max)
     {
 		return value >= min && value <= max;
@@ -413,6 +526,8 @@ public class CSVColumnChecks {
 	
 	/**
 	 * 空白かどうかチェックする
+	 * @param str 
+	 * @return 結果
 	 */
     public static boolean isBlank(String str)
     {
