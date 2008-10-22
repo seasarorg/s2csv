@@ -182,6 +182,9 @@ CSVデータ書き出し時にはヘッダ行が付加されるようになり�
 CSVの区切り文字を指定します。(デフォルト:',')
 
 <h4>CSVカラムフィールドにつけるアノテーション</h4>
+このアノテーションをつけたフィールドがCSVカラムであることを示します。
+CSVカラムとして扱うフィールドには必ずつける必要があります。
+
 <h5>@CSVColumn</h5>
 <h6>columnIndex(必須)</h6>
 CSVデータのカラム位置を指定します。
@@ -200,22 +203,29 @@ false:quoteが出力されません。
 quoteが出力されます。
 CSVデータ読み込み時はこのパラメータの影響を受けません。
 
+<h5>@CSVConvertor</h5>
+カラムの値を自動変換以外のロジックで変換を行いたい場合、CSVカラムフィールドに付加します。
 <h6>convertor(オプション)</h6>
 CSVのデータをオブジェクトに変換する際と
 オブジェクトデータをCSV文字列に変換する際に呼ばれるコンバートクラスを設定します。
-<font color="red">このオプションは廃止され別の形でこの機能を提供する可能性があります。</font>
+
+<h6>convertSetProp(オプション)</h6>
+convertorにセットしたクラスをインスタンス化したときに
+セットしたいパラメータを記述することが出来ます。
+「プロパティ名=パラメータ」と記述するとプロパティに値がセットされて
+コンバータが呼び出されます。
 
 <h6>convToObjMethod(オプション)</h6>
 CSVデータからオブジェクトに変換する際に呼び出されるメソッドを設定します。
+convertorにクラスがセットされている場合、無効になります。
 メソッドはエンティティクラスに宣言し、
 引数はStringで戻り値はカラムのクラスと同じにする必要があります。
-<font color="red">このオプションは廃止され別の形でこの機能を提供する可能性があります。</font>
 
 <h6>convToCSVMethod(オプション)</h6>
 オブジェクトデータをCSV文字列に変換する際に呼ばれるメソッドを設定します。
+convertorにクラスがセットされている場合、無効になります。
 メソッドはエンティティクラスに宣言し、
 引数はカラムのクラスと同じにし、戻り値はStringに必要があります。
-<font color="red">このオプションは廃止され別の形でこの機能を提供する可能性があります。</font>
 
 
 <a name="validation"></a>
@@ -282,6 +292,11 @@ trueにセットした場合、CSVエンティティに値をセットしてか�
 デフォルトではエンティティのメソッドです。
 CSVエンティティ以外を指定する場合、
 実行メソッドはstaticである必要があります。
+
+
+
+<h5>バリデーションメソッド内でのメッセージキーの指定</h5>
+<a href="#msg">メッセージ</a>のバリデーション実行メソッド内で使用できるCSVValidationExceptionを参照。
 
 
 <a name="implImage"></a>
@@ -494,7 +509,7 @@ msgKeyを設定する箇所がありますが、
 CSVMaxLengthを例にして紹介します。
 </p>
 <p>
-${var:maxlength}のように"{var:"の後に、変数名を指定し、
+${var:maxlength}のように"${var:"の後に、変数名を指定し、
 "}"で閉じることで、アノテーションで設定された変数の値をメッセージの引数として利用できます。
 この表記のような文言をそのまま出力したい場合には$を重ねてエスケープできます。
 ここの例ではエスケープすると$${var:maxlength}となります。
@@ -511,6 +526,44 @@ CSVのエラーメッセージを作成する際にカラムの項目名を表�
 ヘッダ出力の名前と同じ用にカラム名はcolumnNameに指定された値かフィールド名になります。
 </p>
 
+<h4>バリデーション実行メソッド内で使用できるCSVValidationException</h4>
+<p>
+バリデーションの実装メソッドは戻り値がbooleanにする必要があります。
+このメソッドでfalseを返すと値が合致しなかったと言うことで、
+バリデーションエラーとなりますが１つのカラムに対して複数のチェックを
+特に、CSVRecordValidatorなどでは行うことがあると思います。<br/>
+しかし、falseで返すとアノテーションで設定されたメッセージキーしか使用出来ません。<br/>
+色々なメッセージキーを返したい場合にはCSVValidationExceptionをthrowすることでそのメッセージキーと
+メッセージ引数を変更することが出来ます。
+</p>
+
+ソースコードはこのような感じになります。
+<pre>
+public boolean testValidate(String column_a_data){
+
+	if(Test.isValdateCheck(column_a_data)){
+		throw new CSVValidationException(
+			"errors.custom",
+			new Object[]{"costom validation error"}
+		);
+	}
+	
+	if(Test.isValdateCheck2(column_a_data)){
+		throw new CSVValidationException(
+			"errors.custom2",
+			new Object[]{"costom validation error2"}
+		);
+	}
+	
+	return true;
+}
+</pre>
+
+<p>
+なお、このCSVValidationExceptionを使ったメッセージキーの変更で指定する
+メッセージ引数ではCSVColumn.REPLACE_NAMEと、${var:xxx}の記法は使えません。
+CSVColumn.REPLACE_LINE_NOは使えます。
+</p>
 
 <h4>メッセージリソース</h4>
 <p>
