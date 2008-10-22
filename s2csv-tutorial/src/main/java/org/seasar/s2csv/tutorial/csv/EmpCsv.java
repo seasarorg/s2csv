@@ -38,12 +38,14 @@ public class EmpCsv {
 	@CSVColumn(columnIndex=3,columnName="マネージャID",quote=false)
 	public Integer mgrId;
 
-	@CSVColumn(columnIndex=4,columnName="入社日",convertor=@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy/MM/dd"))
+	@CSVColumn(columnIndex=4,columnName="入社日")
+	@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy/MM/dd")
 	@CSVDateType(datePattern="yyyy/mm/dd")
 	public Date hiredate;
 
 	@CSVDoubleType
-	@CSVColumn(columnIndex=5,quote=false,convToCSVMethod="salCovToCsv",convToObjMethod="salCovToObj")
+	@CSVColumn(columnIndex=5,quote=false)
+	@CSVConvertor(convToCSVMethod="salCovToCsv",convToObjMethod="salCovToObj")
 	public BigDecimal sal;
 
 	@CSVColumn(columnIndex=6,quote=false)
