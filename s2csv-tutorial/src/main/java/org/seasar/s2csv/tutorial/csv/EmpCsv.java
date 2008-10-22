@@ -14,6 +14,7 @@ import org.seasar.s2csv.csv.annotation.column.CSVRequired;
 import org.seasar.s2csv.csv.annotation.entity.CSVEntity;
 import org.seasar.s2csv.csv.annotation.entity.CSVRecordValidator;
 import org.seasar.s2csv.csv.convertor.CSVDateConvertor;
+import org.seasar.s2csv.csv.exception.runtime.CSVValidationException;
 import org.seasar.s2csv.tutorial.entity.Dept;
 import org.seasar.s2csv.tutorial.service.DeptService;
 
@@ -78,6 +79,12 @@ public class EmpCsv {
 				StringUtil.isBlank(cols[4]) == true
 				){
 			return false;
+		}
+		
+		if(cols[1].equals("9999") &&
+				StringUtil.isBlank(cols[3]) == false){
+			//ここで設定したエラーメッセージキーをバリデーションメッセージに使用する
+			throw new CSVValidationException("errors.emp.custom", new Object[]{"Custom"});
 		}
 		
 		return true;
