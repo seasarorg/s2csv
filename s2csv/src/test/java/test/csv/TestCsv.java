@@ -37,14 +37,16 @@ public class TestCsv {
 	/** */
 	@CSVDateType
 //	@CSVColumn(columnIndex=3,columnName="ほげ日付",convertor=@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy/MM/dd"))
-	@CSVColumn(columnIndex=3,columnName="ほげ日付",convToObjMethod="hogeObj",convToCSVMethod="hogeCsvString")
+	@CSVColumn(columnIndex=3,columnName="ほげ日付")
+	@CSVConvertor(convToObjMethod="hogeObj",convToCSVMethod="hogeCsvString")
 	public Date hogeDate;
 	/** */
 	@CSVColumn(columnIndex=5, columnName="あいうえお")
 	@CSVRequired//(args=hoMsg)
 	public String req;
 	/** */
-	@CSVColumn(columnIndex=6, convertor=@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyyMMdd"))
+	@CSVColumn(columnIndex=6)
+	@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyyMMdd")
 	public Date hogeDate2;
 	/**
 	 * @param columnData 

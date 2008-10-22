@@ -25,7 +25,8 @@ public final class ApartmentCsv {
 	public String buildingKana;
 	/** */@CSVColumn(columnIndex=7)
 	public boolean newBuiltFlg;
-	/** */@CSVColumn(columnIndex=8,convertor=/** */@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy-MM-dd hh:mm:ss.S"))
+	/** */@CSVColumn(columnIndex=8)
+	@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy-MM-dd hh:mm:ss.S")
 	public Date inaugurationDate;
 	/** */@CSVColumn(columnIndex=9)
 	public Integer deckerFeck;
@@ -89,9 +90,11 @@ public final class ApartmentCsv {
 	public String roomPhotoFileName3;
 	/** */@CSVColumn(columnIndex=39)
 	public boolean newArticleFlg;
-	/** */@CSVColumn(columnIndex=40,convertor=/** */@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy-MM-dd hh:mm:ss.S"))
+	/** */@CSVColumn(columnIndex=40)
+	@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy-MM-dd hh:mm:ss.S")
 	public Date updateDate;
-	/** */@CSVColumn(columnIndex=41,convertor=/** */@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy-MM-dd hh:mm:ss.S"))
+	/** */@CSVColumn(columnIndex=41)
+	@CSVConvertor(convertor=CSVDateConvertor.class,convertSetProp="pattern=yyyy-MM-dd hh:mm:ss.S")
 	public Date gexpireDate;
 	/** */@CSVColumn(columnIndex=42)
 	public String roomCD;

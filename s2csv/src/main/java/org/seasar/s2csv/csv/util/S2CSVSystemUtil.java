@@ -110,26 +110,6 @@ public class S2CSVSystemUtil {
 		
 		return newArgs;
 	}
-
-	/**
-	 * カラム設定にコンバータがセットされているかチェックする
-	 * @param c CSVカラム設定
-	 * @return ture:コンバータ設定有り
-	 */
-	public static boolean hasConvertor(CSVColumn c){
-		
-		if(c.convertor() != null){
-			return true;
-		}
-		
-		String methodName = c.convToObjMethod();
-		
-		if(methodName != null && !"".equals(methodName.trim())){
-			return true;
-		}
-		
-		return false;
-	}
 	
 	/**
 	 * フィールドの型からデフォルト設定のアノテーションを取り出す。

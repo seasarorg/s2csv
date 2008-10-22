@@ -216,33 +216,37 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 		desc.setColumnDesc(columnDesc);
 		desc.setCsvColumn(c);
 
-		//バリデーション設定の作成
-		List<CSVValidateDesc> validateList = createCSVValidateDescList(csvClass, columnDesc.getField(), c);
-		desc.setValidateList(validateList);
-		
 		CSVConvertDesc convDesc = createCSVConvertDesc(csvClass, f);
 		desc.setConvert(convDesc);
+
+		//バリデーション設定の作成
+		List<CSVValidateDesc> validateList = 
+			createCSVValidateDescList(csvClass, columnDesc.getField(), c, (convDesc == null));
+		desc.setValidateList(validateList);
+		
 		
 		return desc;
 	}
 	
 	protected CSVConvertDesc createCSVConvertDesc(Class<?> csvClass,Field f){
 
-		CSVColumn c = f.getAnnotation(CSVColumn.class);
+		CSVConvertor conv = f.getAnnotation(CSVConvertor.class);
 		
-		CSVConvertor conv = c.convertor();
+		if(conv == null){
+			return null;
+		}
 
 		if(conv.convertor().equals(CSVColumnConvertor.class)){
 			//コンバータクラスの定義は無いので、メソッド定義があるか調べる
 			
 			Method convToCSVMethod = null;
-			if(StringUtil.isNotBlank(c.convToCSVMethod())){
-				convToCSVMethod = ClassUtil.getMethod(csvClass,c.convToCSVMethod(),new Class<?>[]{f.getType()});				
+			if(StringUtil.isNotBlank(conv.convToCSVMethod())){
+				convToCSVMethod = ClassUtil.getMethod(csvClass,conv.convToCSVMethod(),new Class<?>[]{f.getType()});				
 			}
 
 			Method convToObjMethod = null;
-			if(StringUtil.isNotBlank(c.convToObjMethod())){
-				convToObjMethod = ClassUtil.getMethod(csvClass,c.convToObjMethod(),new Class<?>[]{String.class});
+			if(StringUtil.isNotBlank(conv.convToObjMethod())){
+				convToObjMethod = ClassUtil.getMethod(csvClass,conv.convToObjMethod(),new Class<?>[]{String.class});
 			}
 			
 			if(convToCSVMethod == null && convToObjMethod == null){
@@ -296,13 +300,13 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 	}
 
 	protected List<CSVValidateDesc> createCSVValidateDescList(Class<?> csvClass, Field f,
-			CSVColumn c) {
+			CSVColumn c, boolean defaultTypeValidateFlag) {
 		List<CSVValidateDesc> validateList = new ArrayList<CSVValidateDesc>();
 		
 		//フィールドの型からデフォルトのチェックアノテーションを追加チェックするための設定
 		Class<? extends Annotation> typeAnnotationClazz = null;
 		
-		if(!S2CSVSystemUtil.hasConvertor(c)){
+		if(defaultTypeValidateFlag){
 			//コンバータを持っていないときのみ設定
 			typeAnnotationClazz = S2CSVSystemUtil.getTypeValidateAnnotation(f);
 		}
