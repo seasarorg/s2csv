@@ -82,7 +82,7 @@ public class CSVColumnChecks {
 	 * @param charset 
 	 * @return 結果
 	 */
-	public static boolean validateMinbytelength(String value, int minbytelength,String charset) {
+	public static boolean validateMinByteLength(String value, int minbytelength,String charset) {
 		
 		if (!isBlank(value)){
 			try {
@@ -101,7 +101,7 @@ public class CSVColumnChecks {
 	 * @param charset 
 	 * @return 結果
 	 */
-	public static boolean validateMaxbytelength(String value, int maxbytelength,String charset) {
+	public static boolean validateMaxByteLength(String value, int maxbytelength,String charset) {
 		
 		if (!isBlank(value)){
 			try {
@@ -445,25 +445,29 @@ public class CSVColumnChecks {
 	
 	
 //	TODO Emailチェックは一旦コメント めんどいから
-////	EmailType 
-//	public static boolean validateEmailType(String value){
-//
-//		if(!isBlank(value)){
-//			try {
-//				
-//				if(!isEmail(value)){
-//					return false;
-//				}else{
-//					return true;
-//				}
-//				
-//			} catch (Exception e) {
-//				return false;
-//			}
-//		}
-//
-//		return true;
-//	}
+//	EmailType 
+	/**
+	 * @param value 
+	 * @return 結果
+	 */
+	public static boolean validateEmailType(String value){
+
+		if(!isBlank(value)){
+			try {
+				
+				if(!EmailValidator.isEmail(value)){
+					return false;
+				}else{
+					return true;
+				}
+				
+			} catch (Exception e) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 	
 	
 //	TODO UrlType CSV出力でいるか？ 
