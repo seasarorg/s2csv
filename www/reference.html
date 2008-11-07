@@ -365,6 +365,9 @@ while(csv_parser.readNext()){
 }
 </pre>
 <p>
+readNextを実行するとCSVデータの指定indexがCSVデータで1行分進み次の行を指します。
+（データベースの考えと同じ動作です）
+parseやvalidateメソッドは現在指しているindexの行に対して行います。
 終端まで達すると自動でcloseするので、
 最後まで読み込めた場合closeメソッドを呼び出す必要はありません。
 </p>
@@ -424,6 +427,43 @@ while(csv_parser.readNext()){
 }
 </pre>
 
+全ての行を処理する　例
+
+<p>
+forで回すことなく、
+1回の呼び出しで全てをパースしたい場合
+parseAllメソッドを使用することが出来ます。<br/>
+
+１つでもバリデーションエラーがある場合CSVValidationResultExceptionが投げられますが
+全ての行を処理してからこのExceptionが投げられます。<br/>
+このExceptionにはバリデーションエラーの結果データ全てと
+パースに成功したデータすべてが入っています。<br/>
+大量データを扱う際には全てのデータを読み込んでしまうため使用しないほうが無難でしょう。<br/>
+
+少量のデータしか来ないことが分かっていれば、
+メソッド1つの呼び出しで全てのデータを手に入れることが出来るため手軽かもしれません。
+</p>
+<pre>
+
+List&lt;DeptCsv&gt; list = null;
+List&lt;CSVValidateResult&gt; validateErrList = null;
+
+try {
+	//全ての行を一括でパースする。
+	//バリデーションエラーがある場合はあとでまとめてExceptionに含まれて返る
+	list = csv_parser.parseAll();
+} catch (CSVValidationResultException e) {
+	
+	//バリデーションエラーが無かった行はこれで取得できる。
+	list = e.getDataList();
+	
+	//バリデーションエラーのあった行はこれでバリデーションエラーメッセージ情報が取得できる
+	validateErrList = e.getValidateResultList();
+}
+
+//結果のリストに対する処理
+...
+</pre>
 
 <a name="exception"></a>
 <h4>例外</h4>
