@@ -4,7 +4,10 @@
 <components>
 	<include path="convention.dicon"/>
 	<include path="customizer.dicon"/>
+	
 	<component class="org.seasar.s2csv.creator.CsvCreator"/>
+	
+	
 	<component class="org.seasar.framework.container.creator.ServiceCreator"/>
 	<component class="org.seasar.framework.container.creator.DtoCreator"/>
 	<component class="org.seasar.framework.container.creator.InterceptorCreator"/>

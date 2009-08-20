@@ -1,6 +1,10 @@
 package org.seasar.s2csv.csv.util;
 
+import java.util.List;
+import java.util.Map;
+
 import org.seasar.framework.container.SingletonS2Container;
+import org.seasar.s2csv.csv.command.S2CSVCommand;
 import org.seasar.s2csv.csv.desc.CSVDescPool;
 import org.seasar.s2csv.csv.desc.CSVEntityDesc;
 
@@ -10,7 +14,7 @@ import org.seasar.s2csv.csv.desc.CSVEntityDesc;
  */
 public class S2CSVDescUtil {
 
-	private S2CSVDescUtil(){
+	protected S2CSVDescUtil(){
 	}
 	
 	/**
@@ -21,6 +25,24 @@ public class S2CSVDescUtil {
 	public static CSVEntityDesc getCSVEntityDesc(Class<?> csvEntityClass){
 		
 		return getDescPool().getCSVEntityDesc(csvEntityClass);
+	}
+	
+	/**
+	 * objectからcsvにバリデーション、コンバートするときに使用するコマンドを取得します。
+	 * @param csvEntityClass
+	 * @return commands
+	 */
+	public static Map<String, List<S2CSVCommand>> getToCsvCommands(Class<?> csvEntityClass){
+		return getDescPool().getToCsvCommands(csvEntityClass);
+	}
+
+	/**
+	 * csvからobjectにバリデーション、コンバートするときに使用するコマンドを取得します。
+	 * @param csvEntityClass
+	 * @return commands
+	 */
+	public static Map<String, List<S2CSVCommand>> getToObjCommands(Class<?> csvEntityClass){
+		return getDescPool().getToObjCommands(csvEntityClass);
 	}
 	
 	/**

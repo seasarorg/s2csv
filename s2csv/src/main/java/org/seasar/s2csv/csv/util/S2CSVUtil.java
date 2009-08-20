@@ -2,7 +2,6 @@ package org.seasar.s2csv.csv.util;
 
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.seasar.extension.jdbc.IterationCallback;
@@ -10,6 +9,8 @@ import org.seasar.extension.jdbc.IterationContext;
 import org.seasar.extension.jdbc.JdbcManager;
 import org.seasar.extension.jdbc.Select;
 import org.seasar.framework.container.SingletonS2Container;
+import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
+import org.seasar.framework.util.ClassUtil;
 import org.seasar.s2csv.csv.S2CSVParseCtrl;
 import org.seasar.s2csv.csv.S2CSVWriteCtrl;
 import org.seasar.s2csv.csv.dxo.CSVDxo;
@@ -88,27 +89,21 @@ public class S2CSVUtil {
 		}
 		
 		//バリデーションメソッドは自分で呼び出す。
-		csvParser.setValidateFlag(false);
+		csvParser.setExceptionThrow(false);
 		
-		List<CSVValidateResult> result = new ArrayList<CSVValidateResult>();
 		while(csvParser.readNext()){
-			
-			CSVValidateResult v = csvParser.validate();
 
-			if(v != null){
-				result.add(v);
+			Object csvObj = csvParser.parse();
+
+			if(csvObj == null){
 				continue;
 			}
 			
-			
-			Object csvObj = csvParser.parse();
-			
 			Object daoObj = local_dxo.dxo(daoEntityClass, csvObj);
-			
 			jdbcManager.insert(daoObj).execute();
 		}
 		
-		return result;
+		return csvParser.getValidationResultAll();
 	}
 	
 	/**
@@ -129,8 +124,7 @@ public class S2CSVUtil {
 	
 	/**
 	 * readerのCSVの内容をテーブルに書き出します。
-	 * バリデーションはしません。
-	 * 変換エラーがあった場合、CSVChangeExceptionが投げられます。
+	 * 変換エラーがあった場合、処理を終了しCSVValidationResultRuntimeExceptionが投げられます。
 	 * @param csvEntityClass
 	 * @param daoEntityClass
 	 * @param dxo
@@ -159,15 +153,12 @@ public class S2CSVUtil {
 			local_dxo = new CSVDxoImpl();
 		}
 		
-		//バリデーションはしない。
-		csvParser.setValidateFlag(false);
+		//バリデーションエラー、コンバートエラー発生時はExceptionをthrowします。
+		csvParser.setExceptionThrow(true);
 		
 		while(csvParser.readNext()){
-				
 			Object csvObj = csvParser.parse();
-			
 			Object daoObj = local_dxo.dxo(daoEntityClass, csvObj);
-			
 			jdbcManager.insert(daoObj).execute();
 		}
 	}
@@ -179,7 +170,6 @@ public class S2CSVUtil {
 	 * @param select
 	 * @param writer
 	 */
-	@SuppressWarnings("unchecked")
 	public static void s2jdbcToCsv(
 			final Class<?> entityClass,
 			final Select<?,?> select,
@@ -234,5 +224,26 @@ public class S2CSVUtil {
 		});
 		
 		csvWriter.close();
+	}
+	
+	/**
+	 * CSVエンティティをnewします。
+	 * CSVCreatorなどでコンポーネント定義されている場合、 S2Containerから取得します。
+	 * 定義されていない場合newInstanceでインスタンスを生成します。
+	 * @param <T> エンティティクラス
+	 * @param csvEntityClass
+	 * @return CSVエンティティインスタンス
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T newEntity(Class<T> csvEntityClass){
+
+		if(SingletonS2ContainerFactory.getContainer()
+				.hasComponentDef(csvEntityClass)){
+			//エンティティクラスがコンポーネントとして登録されているときは
+			//コンテナから取得する
+			return (T) SingletonS2Container.getComponent(csvEntityClass);
+		}
+
+		return (T) ClassUtil.newInstance(csvEntityClass);
 	}
 }

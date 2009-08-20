@@ -13,6 +13,7 @@ import test.service.DeptService;
 public class HogeCsv {
 	/** */
 	public DeptService deptService;
+//	public JdbcManagerImplementor jdbcManager;
 	/** */
 	@CSVRequired
 	@CSVColumn(columnIndex=0)
@@ -29,6 +30,11 @@ public class HogeCsv {
 	 * @return result
 	 */
 	public boolean deptValidate(String column_a_data){
+
+//		System.out.println(
+//				jdbcManager.getDialect()
+//				.getSequenceNextValString("hoge", 0)
+//		);
 		
 		Dept dept = deptService.findById(Long.valueOf(1));
 		

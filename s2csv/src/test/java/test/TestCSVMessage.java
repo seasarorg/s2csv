@@ -26,7 +26,8 @@ public class TestCSVMessage extends S2CSVTestBase {
 		S2CSVParseCtrl<AAACsv> pc = S2CSVUtil.getCSVCtrlFactory().getParseController(AAACsv.class, sr);
 		
 		while(pc.readNext()){
-			CSVValidateResult r = pc.validate();
+			pc.parse();
+			CSVValidateResult r = pc.getParseValidationResult();
 			
 			String msg = r.getMsgs().get(0).toString();
 			

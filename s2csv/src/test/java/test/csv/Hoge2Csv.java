@@ -1,5 +1,8 @@
 package test.csv;
 
+import org.seasar.extension.jdbc.DbmsDialect;
+import org.seasar.extension.jdbc.JdbcManager;
+import org.seasar.extension.jdbc.manager.JdbcManagerImpl;
 import org.seasar.s2csv.csv.annotation.CSVValidator;
 import org.seasar.s2csv.csv.annotation.column.CSVColumn;
 import org.seasar.s2csv.csv.annotation.column.CSVMaxLength;

@@ -1,8 +1,10 @@
 package org.seasar.s2csv.csv.desc.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.seasar.s2csv.csv.command.S2CSVCommand;
 import org.seasar.s2csv.csv.desc.CSVDescFactory;
 import org.seasar.s2csv.csv.desc.CSVDescPool;
 import org.seasar.s2csv.csv.desc.CSVEntityDesc;
@@ -21,7 +23,7 @@ public class CSVDescPoolImpl implements CSVDescPool {
 	public CSVDescFactory csvdescFactory;
 	
 	/**
-	 * 
+	 * CSVエンティティの設定をプールします
 	 */
 	public CSVDescPoolImpl(){
 		this.cache = new HashMap<Class<?>,CSVEntityDesc>();
@@ -40,12 +42,26 @@ public class CSVDescPoolImpl implements CSVDescPool {
 			desc = csvdescFactory.createCSVEntityDesc(clazz);
 			registCSVEntityDesc(desc);
 		}
-		
+
 		return desc;
 	}
 
 	public void clear() {
 		this.cache.clear();
+	}
+
+	@Override
+	public Map<String, List<S2CSVCommand>> getToCsvCommands(
+			Class<?> csvEntityClass) {
+		//コマンドは書き換えられることが前提なので毎回作成します。
+		return csvdescFactory.createToCsvCommands(csvEntityClass);
+	}
+
+	@Override
+	public Map<String, List<S2CSVCommand>> getToObjCommands(
+			Class<?> csvEntityClass) {
+		//コマンドは書き換えられることが前提なので毎回作成します。
+		return csvdescFactory.createToObjCommands(csvEntityClass);
 	}
 	
 

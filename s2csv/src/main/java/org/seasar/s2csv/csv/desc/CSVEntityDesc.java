@@ -2,6 +2,8 @@ package org.seasar.s2csv.csv.desc;
 
 import java.util.List;
 
+import org.seasar.s2csv.csv.command.S2CSVCommand;
+
 
 /**
  * CSVエンティティ設定
@@ -29,7 +31,7 @@ public class CSVEntityDesc {
 	 * CSV行全体に対するチェックやエンティティに対するチェックの設定
 	 * (相関チェック等)
 	 */
-	private List<CSVValidateDesc> recordValidate;
+	private List<S2CSVCommand> recordCommands;
 	
 	/**
 	 * @return fieldNames
@@ -104,17 +106,18 @@ public class CSVEntityDesc {
 	public int getColmunSize(){
 		return this.colmunSize;
 	}
+	
 	/**
-	 * @return recordValidate
+	 * @return the recordCommands
 	 */
-	public List<CSVValidateDesc> getRecordValidate() {
-		return recordValidate;
+	public List<S2CSVCommand> getRecordCommands() {
+		return recordCommands;
 	}
 	/**
-	 * @param recordValidate
+	 * @param recordCommands the recordCommands to set
 	 */
-	public void setRecordValidate(List<CSVValidateDesc> recordValidate) {
-		this.recordValidate = recordValidate;
+	public void setRecordCommands(List<S2CSVCommand> recordCommands) {
+		this.recordCommands = recordCommands;
 	}
 	/**
 	 * @return the checkColumnSize
@@ -152,4 +155,5 @@ public class CSVEntityDesc {
 	public void setDemiliter(char demiliter) {
 		this.demiliter = demiliter;
 	}
+	
 }

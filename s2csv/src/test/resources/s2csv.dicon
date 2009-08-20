@@ -2,8 +2,16 @@
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN" 
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
+  <component class="org.seasar.s2csv.csv.factory.impl.S2CSVCtrlFactoryImpl" instance="singleton" />
+  
   <component class="org.seasar.s2csv.csv.desc.impl.CSVDescPoolImpl" instance="singleton" />
   <component class="org.seasar.s2csv.csv.desc.impl.CSVDescFactoryImpl" instance="singleton" />
+  
+  <component class="org.seasar.s2csv.csv.factory.CSVFactoryConfigContext" instance="prototype" />
+  <component class="org.seasar.s2csv.csv.factory.impl.DefaultCSVParserFactory" instance="prototype" />
+  <component class="org.seasar.s2csv.csv.factory.impl.DefaultCSVWriterFactory" instance="prototype" />
+  
+  <component name="csvCommandInvoker" class="org.seasar.s2csv.csv.command.CSVCommandInvoker" instance="prototype" />
   <component class="org.seasar.s2csv.csv.controller.CSVParseCtrlImpl" instance="prototype" />
   <component class="org.seasar.s2csv.csv.controller.CSVWriteCtrlImpl" instance="prototype" />
 </components>

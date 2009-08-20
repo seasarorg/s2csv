@@ -66,4 +66,11 @@ public class CSVValidateResult {
 		
 		return sb.toString();
 	}
+	/**
+	 * エラーメッセージがあるかを返します。
+	 * @return true:エラーメッセージあり
+	 */
+	public boolean hasMsg() {
+		return !msgs.isEmpty();
+	}
 }

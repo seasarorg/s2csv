@@ -76,20 +76,23 @@ public class TestExec extends S2CSVTestBase {
 
 		StringReader sr = new StringReader("ヘッダ,,,,,,\r\n" +
 				"hogehoge,,\"\",2008/01/04,,\"\",\r\n");
-		String[] check = {"hogehoge","","","2008/01/04","","",""};
+		String[][] check = {{"ヘッダ","","","","","","",},{"hogehoge","","","2008/01/04","","",""}};
 
 		CSVParser sp = new DefaultCSVParser(sr, S2CSVDescUtil
 				.getCSVEntityDesc(TestCsv.class));
 
+		int checkIndex = 0;
 		while (sp.isNext()) {
 			String[] test = sp.nextLine();
 			
 			for(int i=0;i<test.length;i++){
 				String a = test[i];
-				String b = check[i];
+				String b = check[checkIndex][i];
 				
 				assertEquals(a,b);
 			}
+			
+			checkIndex++;
 		}
 	}
 
@@ -118,8 +121,9 @@ public class TestExec extends S2CSVTestBase {
 		S2CSVParseCtrl<HogeCsv> c = S2CSVUtil.getCSVCtrlFactory()
 				.getParseController(HogeCsv.class, sr);
 
-		List<CSVValidateResult> list = c.validateAll();
-		System.out.println(list.size());
+		c.parseAll();
+		List<CSVValidateResult> resultList = c.getValidationResultAll();
+		System.out.println(resultList.size());
 
 		c.close();
 	}
@@ -314,7 +318,8 @@ public class TestExec extends S2CSVTestBase {
 		S2CSVParseCtrl<TestCsv> c = S2CSVUtil.getCSVCtrlFactory()
 				.getParseController(TestCsv.class, sr);
 
-		List<CSVValidateResult> resultList = c.validateAll();
+		c.parseAll(1);
+		List<CSVValidateResult> resultList = c.getValidationResultAll();
 
 		//int i = 0;
 		for (CSVValidateResult r : resultList) {
@@ -357,8 +362,9 @@ public class TestExec extends S2CSVTestBase {
 		StringReader sr = new StringReader(csvData);
 		S2CSVParseCtrl<Hoge4Csv> c = S2CSVUtil.getCSVCtrlFactory()
 				.getParseController(Hoge4Csv.class, sr);
-		
-		List<CSVValidateResult> resultList = c.validateAll();
+
+		c.parseAll();
+		List<CSVValidateResult> resultList = c.getValidationResultAll();
 
 //		int i = 0;
 		for (CSVValidateResult r : resultList) {
@@ -379,8 +385,9 @@ public class TestExec extends S2CSVTestBase {
 		StringReader sr = new StringReader(csvData);
 		S2CSVParseCtrl<Hoge5Csv> c = S2CSVUtil.getCSVCtrlFactory()
 				.getParseController(Hoge5Csv.class, sr);
-		
-		List<CSVValidateResult> resultList = c.validateAll();
+
+		c.parseAll();
+		List<CSVValidateResult> resultList = c.getValidationResultAll();
 
 //		int i = 0;
 		for (CSVValidateResult r : resultList) {
@@ -400,8 +407,9 @@ public class TestExec extends S2CSVTestBase {
 		StringReader sr = new StringReader(csvData);
 		S2CSVParseCtrl<Hoge6Csv> c = S2CSVUtil.getCSVCtrlFactory()
 				.getParseController(Hoge6Csv.class, sr);
-		
-		List<CSVValidateResult> resultList = c.validateAll();
+
+		c.parseAll();
+		List<CSVValidateResult> resultList = c.getValidationResultAll();
 
 //		int i = 0;
 		for (CSVValidateResult r : resultList) {

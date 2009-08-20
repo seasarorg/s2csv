@@ -42,11 +42,6 @@ public class DefaultCSVParser implements CSVParser {
 		this.csvDesc = csvConf;
 		
 		this.sb = new StringBuilder();
-
-		if(csvConf.isHeader()){
-			//headerありの場合一行ここで読んでしまう。
-			nextLine();
-		}
 	}
 	
 	public void close() {
@@ -141,8 +136,6 @@ public class DefaultCSVParser implements CSVParser {
 			if(lineSize == p){
 				if(!quoteState){
 					cols[colIndex] = sb.toString();
-
-					colIndex++;
 					break;
 				}else{
 					sb.append("\n");
@@ -211,7 +204,7 @@ public class DefaultCSVParser implements CSVParser {
 			}	
 		}
 		
-		if(csvDesc.isCheckColumnSize() && colIndex != size){
+		if(csvDesc.isCheckColumnSize() && colIndex != (size -1)){
 			throw new CSVFormatException(lineNo);
 		}
 		

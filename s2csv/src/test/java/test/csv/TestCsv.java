@@ -64,8 +64,9 @@ public class TestCsv {
 	}
 	/**
 	 * @param columndata 
-	 * @return result */
-	public boolean check(String columndata){
+	 * @return result 
+	 * @throws CSVValidationException */
+	public boolean check(String columndata) throws CSVValidationException{
 		
 		if(columndata == null){
 			//return true;

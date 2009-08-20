@@ -4,7 +4,7 @@ package org.seasar.s2csv.csv.exception.runtime;
  * バリデーションエラーException
  * @author newta
  */
-public class CSVValidationException extends RuntimeException{
+public class CSVValidationException extends RuntimeException {
 
 
 	private String msgKey = null;

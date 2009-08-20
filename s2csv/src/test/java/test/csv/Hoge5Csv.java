@@ -24,8 +24,9 @@ public class Hoge5Csv {
 	 * 
 	 * @param column_a_data
 	 * @return result
+	 * @throws CSVValidationException 
 	 */
-	public boolean deptValidate(String column_a_data){
+	public boolean deptValidate(String column_a_data) throws CSVValidationException{
 		
 		if(StringUtil.isNotBlank(column_a_data)){
 			throw new CSVValidationException("errors.custom",new Object[]{"costom validation error"});

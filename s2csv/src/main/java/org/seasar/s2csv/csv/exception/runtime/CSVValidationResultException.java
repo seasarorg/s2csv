@@ -10,7 +10,7 @@ import org.seasar.s2csv.csv.validator.CSVValidateResult;
  * (ValidationFlagがtureのときにしか発生しない)
  * @author newta
  */
-public class CSVValidationResultException extends Exception {
+public class CSVValidationResultException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	

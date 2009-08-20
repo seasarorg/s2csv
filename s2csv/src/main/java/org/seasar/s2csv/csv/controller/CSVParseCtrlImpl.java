@@ -2,18 +2,21 @@ package org.seasar.s2csv.csv.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.seasar.framework.container.SingletonS2Container;
+import javax.annotation.Resource;
+
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.s2csv.csv.S2CSVParseCtrl;
-import org.seasar.s2csv.csv.convertor.CSVConvertCtrl;
+import org.seasar.s2csv.csv.command.CSVCommandInvoker;
+import org.seasar.s2csv.csv.command.S2CSVCommand;
+import org.seasar.s2csv.csv.command.S2CSVCommandContext;
 import org.seasar.s2csv.csv.desc.CSVEntityDesc;
 import org.seasar.s2csv.csv.exception.CSVFormatException;
 import org.seasar.s2csv.csv.exception.runtime.CSVValidationResultException;
 import org.seasar.s2csv.csv.exception.runtime.CSVValidationResultRuntimeException;
 import org.seasar.s2csv.csv.io.CSVParser;
-import org.seasar.s2csv.csv.validator.CSVValidateCtrl;
 import org.seasar.s2csv.csv.validator.CSVValidateResult;
 
 /**
@@ -23,42 +26,43 @@ import org.seasar.s2csv.csv.validator.CSVValidateResult;
  */
 public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 
-	private CSVConvertCtrl maker;
-	private CSVValidateCtrl validator;
+	private CSVCommandInvoker commandInvoker;
 	
 	private CSVParser parser;
 	private CSVEntityDesc csvEntityDesc;
 
-	@Binding(bindingType=BindingType.NONE)
-	private boolean validateFlag;
-
-	private Object validateEntity;
-	
 	private boolean next;
 	private String[] currentLine;
 	private long currentNo;
+	
+	private CSVValidateResult parseValidationResult; 
+	
+	private List<CSVValidateResult> validationResults;
+	private boolean exceptionThrow;
+	private Map<String, List<S2CSVCommand>> commandMap;
 
+	private S2CSVCommandContext commandContext;
+	
+	@Override
+	@Resource(name="csvCommandInvoker")
+	public void setCSVCommandInvoker(CSVCommandInvoker commandInvoker){
+		this.commandInvoker = commandInvoker;
+	}
+
+
+	@Override
+	//通常Streamを持つため手動でセットします。
+	@Binding(bindingType=BindingType.NONE)
 	public void setCSVParser(CSVParser parser){
 		this.parser = parser;
 	}
 
+	@Override
 	public void setCSVEntityDesc(CSVEntityDesc csvEntityDesc){
 		this.csvEntityDesc = csvEntityDesc;
 	}
 
-	public void setCSVMaker(CSVConvertCtrl maker){
-		this.maker = maker;
-	}
-
-	public void setCSVValidator(CSVValidateCtrl validator){
-		this.validator = validator;
-	}
-
-
-	public void setValidateFlag(boolean validateFlag) {
-		this.validateFlag = validateFlag;
-	}
-
+	@Override
 	public boolean readNext() {
 		
 		boolean tmpHeaderCheck = false;
@@ -70,7 +74,6 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 		next = parser.isNext();
 		
 		if(next){
-			
 			if(tmpHeaderCheck){
 				//ヘッダ文字列が同じかチェックする
 				int hedLength = csvEntityDesc.getHeaderNames().length;
@@ -100,101 +103,112 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 	@SuppressWarnings("unchecked")
 	public T parse() throws CSVValidationResultRuntimeException {
 		
+		if(commandContext == null){
+			this.commandContext = new S2CSVCommandContext();
+		}
+		commandInvoker.setContext(commandContext);
+		
 		T o = null;
-		
-		//エンティティ取得
-		T entity = (T) SingletonS2Container
-							.getComponent(csvEntityDesc.getEntityClass());
-		
-		if(validateFlag){
-			CSVValidateResult valRes = 
-				this.validateLine(entity , currentLine, currentNo);
+		try{
+			o = (T) commandInvoker.toObj(csvEntityDesc, currentLine, currentNo, commandMap);
+		}catch(CSVValidationResultRuntimeException e){
+			if(validationResults == null){
+				validationResults = new ArrayList<CSVValidateResult>();
+			}
 			
-			if(valRes != null){
-				throw new CSVValidationResultRuntimeException(valRes);
+			parseValidationResult = e.getValidateResult();
+			validationResults.add(parseValidationResult);
+			
+			if(exceptionThrow){
+				throw e;
 			}
 		}
 		
-		o = maker.covToObj(entity, currentLine);
-		
 		return o;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public List<T> parseAll() throws CSVValidationResultException {
 
-		List<CSVValidateResult> validateResult = new ArrayList<CSVValidateResult>();
+	@Override
+	public List<T> parseAll() throws CSVValidationResultException {
+		return this.parseAll(0);
+	}
+
+	@Override
+	public List<T> parseAll(int errorLimitCount) throws CSVValidationResultException {
+
+		//parseAllのthrow処理
+		boolean tmpExceptionThrow = this.exceptionThrow;
 		
-		List cache = new ArrayList();
+		//parseの処理でthrowするかしないか設定する。
+		this.exceptionThrow = (errorLimitCount > 0);
+		
+		List<T> cache = new ArrayList<T>();
 		try{
 			while(this.readNext()){
 				try{
 					T o = this.parse();
-					cache.add(o);
+					
+					//バリデーションエラーが起きているときはnullになる
+					if(o != null){
+						cache.add(o);
+					}
 				}catch(CSVValidationResultRuntimeException e){
-					validateResult.add(e.getValidateResult());
+					
+					if(validationResults.size() >= errorLimitCount){
+						//エラー上限数までエラーが発生したら終了する
+						
+						//throwフラグを戻す
+						this.exceptionThrow = tmpExceptionThrow;
+						if(this.exceptionThrow){
+							throw new CSVValidationResultException(
+									cache,
+									validationResults
+									);
+						}else{
+							return cache;
+						}
+					}
 				}
 			}
 		}finally{
 			this.close();
 		}
 		
-		if(validateResult.size() > 0){
-			throw new CSVValidationResultException(
-					cache, validateResult
-					);
-		}
-
 		return cache;
 	}
 	
 	public void close(){
 		this.parser.close();
 	}
-	
-	/**
-	 * 一行分のバリデーションを行う
-	 * @param validateEntity
-	 * @param line
-	 * @param lineNo
-	 * @return バリデーションエラーがないときはnull
-	 */
-	public CSVValidateResult validateLine(Object validateEntity, String[] line, long lineNo){
-		return validator.validate(validateEntity , line, lineNo);
+
+	@Override
+	public CSVEntityDesc getCSVEntityDesc() {
+		return csvEntityDesc;
 	}
 
-	/**
-	 * バリデーションのみを行います。
-	 * @return バリデーション結果
-	 */
-	public List<CSVValidateResult> validateAll(){
-
-		List<CSVValidateResult> result = new ArrayList<CSVValidateResult>();
-		
-		try{
-			Object entity = SingletonS2Container.getComponent(csvEntityDesc.getEntityClass());
-			
-			while(this.readNext()){
-				CSVValidateResult vaRes = 
-					this.validateLine(entity , currentLine, currentNo);
-				
-				if(vaRes != null){
-					result.add(vaRes);
-				}
-			}
-		}finally{
-			this.close();
-		}
-		
-		return result;
+	@Override
+	public List<S2CSVCommand> getCommands(String propertyName) {
+		return commandMap.get(propertyName);
 	}
 
-	public CSVValidateResult validate() {
-		if(validateEntity == null){
-			//バリデーションで使用するEntityはパフォーマンスのためインスタンス生成は１度だけ
-			validateEntity = SingletonS2Container
-							.getComponent(csvEntityDesc.getEntityClass());
-		}
-		return this.validateLine(validateEntity , currentLine, currentNo);
+
+	@Override
+	public void setCommandMap(Map<String, List<S2CSVCommand>> commandMap) {
+		this.commandMap = commandMap;
 	}
+
+	@Override
+	public void setExceptionThrow(boolean b) {
+		this.exceptionThrow = b;
+	}
+
+	@Override
+	public CSVValidateResult getParseValidationResult() {
+		return parseValidationResult;
+	}
+
+	@Override
+	public List<CSVValidateResult> getValidationResultAll() {
+		return validationResults;
+	}
+
 }

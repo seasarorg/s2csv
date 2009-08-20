@@ -57,7 +57,7 @@ public class DefaultCSVWriter implements CSVWriter {
 						continue;
 					}
 					
-					putCol(col, colDesc.quote());
+					putCol(col, colDesc.isQuote());
 				}
 
 				writer.write("\r\n");

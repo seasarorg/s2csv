@@ -6,7 +6,6 @@ import java.io.Writer;
 import org.seasar.framework.container.SingletonS2Container;
 import org.seasar.s2csv.csv.S2CSVParseCtrl;
 import org.seasar.s2csv.csv.S2CSVWriteCtrl;
-import org.seasar.s2csv.csv.convertor.CSVConvertCtrl;
 import org.seasar.s2csv.csv.desc.CSVEntityDesc;
 import org.seasar.s2csv.csv.factory.CSVFactoryConfigContext;
 import org.seasar.s2csv.csv.factory.S2CSVCtrlFactory;
@@ -15,13 +14,35 @@ import org.seasar.s2csv.csv.factory.S2CSVWriterFactory;
 import org.seasar.s2csv.csv.io.CSVParser;
 import org.seasar.s2csv.csv.io.CSVWriter;
 import org.seasar.s2csv.csv.util.S2CSVDescUtil;
-import org.seasar.s2csv.csv.validator.CSVValidateCtrl;
 
 /**
  * Parse、WriteやValidation、Convertをコントロールするインスタンスを生成するファクトリです。
  * @author newta
  */
 public class S2CSVCtrlFactoryImpl implements S2CSVCtrlFactory {
+
+	/**
+	 * ParseControllerやWriteControllerに
+	 * defaultでセットする値です。
+	 */
+	private boolean exceptionThrowFlag;
+
+
+	/**
+	 * @return the exceptionThrowFlag
+	 */
+	public boolean isExceptionThrowFlag() {
+		return exceptionThrowFlag;
+	}
+
+
+	/**
+	 * @param exceptionThrowFlag the exceptionThrowFlag to set
+	 */
+	public void setExceptionThrowFlag(boolean exceptionThrowFlag) {
+		this.exceptionThrowFlag = exceptionThrowFlag;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public <T> S2CSVParseCtrl<T> getParseController(
@@ -41,15 +62,10 @@ public class S2CSVCtrlFactoryImpl implements S2CSVCtrlFactory {
 			//TODO メッセージをつける
 			throw new RuntimeException("null csv entity desc[" + entityClass.getName() + "]");
 		}
-
-		CSVConvertCtrl maker = new CSVConvertCtrl(csvEntityDesc);
-		CSVValidateCtrl validator = new CSVValidateCtrl(csvEntityDesc);
-		
 		csvpc.setCSVEntityDesc(csvEntityDesc);
 		csvpc.setCSVParser(parser);
-		csvpc.setCSVMaker(maker);
-		csvpc.setCSVValidator(validator);
-		csvpc.setValidateFlag(true);
+		csvpc.setExceptionThrow(exceptionThrowFlag);
+		csvpc.setCommandMap(S2CSVDescUtil.getToObjCommands(entityClass));
 		
 		return csvpc;
 	}
@@ -89,15 +105,10 @@ public class S2CSVCtrlFactoryImpl implements S2CSVCtrlFactory {
 			//TODO メッセージをつける
 			throw new RuntimeException("null csv entity desc[" + entityClass.getName() + "]");
 		}
-
-		CSVConvertCtrl maker = new CSVConvertCtrl(csvEntityDesc);
-		CSVValidateCtrl validator = new CSVValidateCtrl(csvEntityDesc);
-
 		csvwc.setCSVEntityDesc(csvEntityDesc);
 		csvwc.setCSVWriter(writer);
-		csvwc.setCSVMaker(maker);
-		csvwc.setCSVValidator(validator);
-		csvwc.setValidateFlag(false);
+		csvwc.setExceptionThrow(exceptionThrowFlag);
+		csvwc.setCommandMap(S2CSVDescUtil.getToCsvCommands(entityClass));
 		
 		return csvwc;
 	}

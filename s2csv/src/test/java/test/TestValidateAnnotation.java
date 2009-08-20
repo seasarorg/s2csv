@@ -24,12 +24,11 @@ public class TestValidateAnnotation extends S2CSVTestBase {
 
 		S2CSVParseCtrl<BBBCsv> pc = S2CSVUtil.getCSVCtrlFactory().getParseController(
 				BBBCsv.class, sr);
-
-		pc.setValidateFlag(false);
 		
 		while (pc.readNext()) {
 			System.out.println("---");
-			CSVValidateResult resultList = pc.validate();
+			pc.parse();
+			CSVValidateResult resultList = pc.getParseValidationResult();
 			System.out.println(pc.parse());
 
 			if(resultList != null) {
@@ -51,11 +50,10 @@ public class TestValidateAnnotation extends S2CSVTestBase {
 		S2CSVParseCtrl<BBBCsv> pc = S2CSVUtil.getCSVCtrlFactory().getParseController(
 				BBBCsv.class, sr);
 
-		pc.setValidateFlag(false);
-		
 		while (pc.readNext()) {
 			System.out.println("---");
-			CSVValidateResult resultList = pc.validate();
+			pc.parse();
+			CSVValidateResult resultList = pc.getParseValidationResult();
 			System.out.println(pc.parse());
 
 			if(resultList != null) {
