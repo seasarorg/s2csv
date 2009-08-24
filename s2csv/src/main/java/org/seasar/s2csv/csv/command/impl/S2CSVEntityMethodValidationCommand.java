@@ -3,13 +3,13 @@ package org.seasar.s2csv.csv.command.impl;
 import java.lang.reflect.Method;
 
 import org.seasar.framework.util.MethodUtil;
-import org.seasar.s2csv.csv.command.base.S2CSVValidationCommand;
+import org.seasar.s2csv.csv.command.base.S2CSVColmunValidationCommand;
 
 /**
  * entityの メソッドでバリデーションチェックを行います。
  * @author newta
  */
-public class S2CSVEntityMethodValidationCommand extends S2CSVValidationCommand {
+public class S2CSVEntityMethodValidationCommand extends S2CSVColmunValidationCommand {
 
 	private Object[] methodArgs;
 	private Method validateMethod;

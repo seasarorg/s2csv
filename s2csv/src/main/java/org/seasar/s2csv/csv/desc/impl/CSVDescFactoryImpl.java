@@ -23,10 +23,9 @@ import org.seasar.s2csv.csv.annotation.column.CSVConvertor;
 import org.seasar.s2csv.csv.annotation.entity.CSVEntity;
 import org.seasar.s2csv.csv.annotation.entity.CSVRecordValidator;
 import org.seasar.s2csv.csv.command.S2CSVCommand;
-import org.seasar.s2csv.csv.command.base.S2CSVConvertCommand;
+import org.seasar.s2csv.csv.command.impl.S2CSVEntityMethodRecodeValidationCommand;
 import org.seasar.s2csv.csv.command.impl.S2CSVEntityMethodValidationCommand;
 import org.seasar.s2csv.csv.command.impl.S2CSVMethodConvertCommand;
-import org.seasar.s2csv.csv.command.impl.S2CSVStaticMethodConvertCommand;
 import org.seasar.s2csv.csv.command.impl.S2CSVStaticMethodValidationCommand;
 import org.seasar.s2csv.csv.convertor.CSVColumnConvertor;
 import org.seasar.s2csv.csv.desc.CSVColumnDesc;
@@ -223,16 +222,6 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 		desc.setColomnName(c.columnName());
 		desc.setColumnIndex(c.columnIndex());
 		desc.setQuote(c.quote());
-		
-//TODO 別のところでCommandに追加するクラスを作成するようにする。
-//		CSVConvertDesc convDesc = createCSVConvertDesc(csvClass, f);
-//		desc.setConvert(convDesc);
-//
-//		//バリデーション設定の作成
-//		List<CSVValidateDesc> validateList = 
-//			createCSVValidateDescList(csvClass, columnDesc.getField(), c, (convDesc == null));
-//		desc.setValidateList(validateList);
-		
 		
 		return desc;
 	}
@@ -457,7 +446,7 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 			}
 			List<S2CSVCommand> resultList = new ArrayList<S2CSVCommand>();
 		
-			//コンバートの設定 TODO どうしよう
+			//コンバートの設定
 			CSVConvertDesc convDesc = createCSVConvertDesc(csvEntityClass, f);
 
 			if(convDesc != null){
@@ -478,6 +467,9 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 
 			commandMap.put(f.getName(), resultList);
 		}
+
+		//TODO CSV出力の際のレコードのバリデーション設定はどうするか・・・
+		
 		return commandMap;
 	}
 
@@ -509,7 +501,6 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 
 				S2CSVCommand command;
 				
-				
 				if(validateDesc.isEntityVadlidateMethod()){
 					command = new S2CSVEntityMethodValidationCommand(
 							validateDesc.getMsgKey()
@@ -527,19 +518,54 @@ public class CSVDescFactoryImpl implements CSVDescFactory {
 				resultList.add(command);
 			}
 
-			//コンバートの設定 TODO どうしよう
+			//コンバートの設定
 			CSVConvertDesc convDesc = createCSVConvertDesc(csvEntityClass, f);
-//			resultList.add(
-//					new S2CSVStaticMethodConvertCommand(
-//							convDesc.getConvToObjMethod()
-//							,convDesc.getConvClassProps())
-//					);
+
+			if(convDesc != null){
+				Object convInstance = null;
+				if(convDesc.getConvClass() != null){
+					//nullのときはエンティティメソッド
+					//TODO ローカルルールだなぁ。。直したい。
+					convInstance = ClassUtil.newInstance(convDesc.getConvClass());
+				}
+				
+				resultList.add(
+						new S2CSVMethodConvertCommand(
+								convInstance
+								,convDesc.getConvToObjMethod()
+								,convDesc.getConvClassProps())
+						);
+			}
 			
 			commandMap.put(f.getName(), resultList);
 		}
 
 		//レコードのバリデーション設定
 		List<CSVValidateDesc> recValList = createRecordValidate(csvEntityClass);
+		
+		List<S2CSVCommand> recodeValidateList = new ArrayList<S2CSVCommand>();
+		for (CSVValidateDesc validateDesc : recValList) {
+
+			S2CSVCommand command;
+			if(validateDesc.isEntityVadlidateMethod()){
+				command = new S2CSVEntityMethodRecodeValidationCommand(
+						validateDesc.getMsgKey()
+						,validateDesc.getMsgArgs()
+						,validateDesc.getValidateMethod()
+						,validateDesc.getValidateMethodArgs());
+			}else{
+				command = new S2CSVStaticMethodValidationCommand(
+						validateDesc.getMsgKey()
+						,validateDesc.getMsgArgs()
+						,validateDesc.getValidateMethod()
+						,validateDesc.getValidateMethodArgs());
+			}
+			
+			recodeValidateList.add(command);
+		}
+		commandMap.put(S2CSVCommand.RECODE, recodeValidateList);
+		
+		
 
 		return commandMap;
 	}

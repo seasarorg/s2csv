@@ -139,7 +139,7 @@ public class CSVCommandInvoker {
 			
 			//コマンドを実行します
 			//エラーの場合resultにエラー情報が追加されます。
-			execCommand(commands, value, result, csvLine, lineNo,
+			value = execCommand(commands, value, result, csvLine, lineNo,
 					colDesc.getColumnDesc().getField());
 			
 			//エンティティに対して変換・チェックしたデータをセット

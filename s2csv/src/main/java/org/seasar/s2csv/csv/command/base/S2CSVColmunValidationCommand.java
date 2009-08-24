@@ -6,7 +6,7 @@ import org.seasar.s2csv.csv.exception.runtime.CSVValidationException;
 /**
  * @author newta
  */
-public abstract class S2CSVValidationCommand extends S2CSVBaseCommand {
+public abstract class S2CSVColmunValidationCommand extends S2CSVBaseCommand {
 
 	@Override
 	public Object execute(Object o) throws CSVValidationException {

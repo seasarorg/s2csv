@@ -29,7 +29,7 @@ public class CSVColumnChecks {
 		return true;
 	}
 	
-	//TODO Validwhen 作るのは気が向いたらで。
+	//TODO Validwhen はcommons-validator使う気になったら何かするかも。
 	
 //	Minlength 
 	/**
@@ -444,8 +444,6 @@ public class CSVColumnChecks {
 //	TODO CreditCardTypeはめんどそうだからとりあえず実装しない
 	
 	
-//	TODO Emailチェックは一旦コメント めんどいから
-//	EmailType 
 	/**
 	 * @param value 
 	 * @return 結果
@@ -470,7 +468,7 @@ public class CSVColumnChecks {
 	}
 	
 	
-//	TODO UrlType CSV出力でいるか？ 
+//	TODO UrlType CSV出力もしない。
 
 	/**
 	 * 範囲チェック

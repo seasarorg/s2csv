@@ -2,6 +2,8 @@ package test;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -305,7 +307,12 @@ public class TestExec extends S2CSVTestBase {
 			System.out.println(o.hoge);
 			System.out.println(o.hoge2);
 			System.out.println(o.hogeInt);
+			
+			DateFormat sdf = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM);
 			System.out.println(o.hogeDate);
+			if(sdf.format(o.hogeDate).equals(sdf.format(new Date())) == false){
+				fail();
+			}
 		}
 	}
 
