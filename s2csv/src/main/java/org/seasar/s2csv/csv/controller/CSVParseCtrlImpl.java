@@ -43,6 +43,9 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 
 	private S2CSVCommandContext commandContext;
 	
+	private String[] header;
+	private boolean readHeader = false;
+	
 	@Override
 	@Resource(name="csvCommandInvoker")
 	public void setCSVCommandInvoker(CSVCommandInvoker commandInvoker){
@@ -65,30 +68,36 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 	@Override
 	public boolean readNext() {
 		
-		boolean tmpHeaderCheck = false;
-		if(!next && csvEntityDesc.isCheckHeader()){
-			//まだ1回も読んでないとき
-			tmpHeaderCheck = true;
-		}
-		
-		next = parser.isNext();
-		
-		if(next){
-			if(tmpHeaderCheck){
+		if(readHeader == false && csvEntityDesc.isHeader()){
+			//まだヘッダー行が読まれていない かつ ヘッダーありのとき
+			readHeader = true;
+			
+			//ヘッダ分の行を読む
+			next = parser.isNext();
+			if(next){
+				header = parser.nextLine();
+				currentNo = parser.getCurrentLineNo();
+			}
+
+			if(csvEntityDesc.isCheckHeader()){
 				//ヘッダ文字列が同じかチェックする
 				int hedLength = csvEntityDesc.getHeaderNames().length;
-				String[] heders = parser.getHeader();
 				for(int i =0;i<hedLength;i++){
 					
 					String hed1 = csvEntityDesc.getHeaderNames()[i];
-					String hed2 = heders[i];
+					String hed2 = header[i];
 					
 					if(hed1.equals(hed2) == false){
 						throw new CSVFormatException(1);
 					}
 				}
 			}
-			
+		}
+		
+		//データ行の読み取り
+		next = parser.isNext();
+		
+		if(next){
 			currentLine = parser.nextLine();
 			currentNo = parser.getCurrentLineNo();
 		}else{
@@ -102,6 +111,10 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 
 	@SuppressWarnings("unchecked")
 	public T parse() throws CSVValidationResultRuntimeException {
+
+		if(validationResults == null){
+			validationResults = new ArrayList<CSVValidateResult>();
+		}
 		
 		if(commandContext == null){
 			this.commandContext = new S2CSVCommandContext();
@@ -112,9 +125,6 @@ public class CSVParseCtrlImpl<T> implements S2CSVParseCtrl<T>{
 		try{
 			o = (T) commandInvoker.toObj(csvEntityDesc, currentLine, currentNo, commandMap);
 		}catch(CSVValidationResultRuntimeException e){
-			if(validationResults == null){
-				validationResults = new ArrayList<CSVValidateResult>();
-			}
 			
 			parseValidationResult = e.getValidateResult();
 			validationResults.add(parseValidationResult);
