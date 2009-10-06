@@ -27,5 +27,10 @@ public class EmailValidatorTest extends TestCase {
 		assertTrue(EmailValidator.isEmail("a.a@a.a.aa"));
 		assertTrue(EmailValidator.isEmail("1a.a@a.a.aa"));
 		assertTrue(EmailValidator.isEmail("1a.a@A.a3.aa"));
+
+		assertTrue(EmailValidator.isEmail("aaaaaa@aaa.b3bb.co.jp"));
+		assertTrue(EmailValidator.isEmail("aaa.aaa@bbb.co.jp"));
+		assertTrue(EmailValidator.isEmail("aaa3aaa@aaa.bbb.co.jp"));
+		
 	}
 }

@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
  * Emailアドレス形式であるかチェックする
  * 
  * @author newta
- * 
  */
 public class EmailValidator {
 
