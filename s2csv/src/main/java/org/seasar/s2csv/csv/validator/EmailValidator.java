@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class EmailValidator {
 
-	static protected String ptnStr = "[¥¥d[a-z]]+@[¥¥d[a-z]]+.[a-z]+|[¥¥d[a-z]]+@[¥¥d[a-z]]+.[a-z]+.[a-z]+|[¥¥d[a-z]]+@[¥¥d[a-z]]+.[a-z]+.[a-z]+.[a-z]+";
+	static protected String ptnStr = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)";
 	static private Pattern ptn = Pattern.compile(ptnStr);
 
 	/**
@@ -20,6 +20,7 @@ public class EmailValidator {
 	 * @return true:email形式
 	 */
 	public static boolean isEmail(String email) {
+		
 		Matcher mc = ptn.matcher(email);
 		if (mc.matches()) {
 			return true;
