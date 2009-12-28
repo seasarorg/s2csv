@@ -22,6 +22,7 @@ import org.seasar.s2csv.csv.validator.CSVValidateResult;
 import test.csv.Hoge4Csv;
 import test.csv.Hoge5Csv;
 import test.csv.Hoge6Csv;
+import test.csv.Hoge7Csv;
 import test.csv.HogeCsv;
 import test.csv.MethodConfErrorCsv;
 import test.csv.TestCsv;
@@ -426,6 +427,24 @@ public class TestExec extends S2CSVTestBase {
 				System.out.println(m);
 				assertEquals(m.toString(),"バリデーションエラー:costom validation error2");
 			}
+		}
+	}
+
+	/** */
+	@Test
+	public void testCSVNoDefineColumn(){
+
+		String csvDataB = "1,2,3,4,5,6,7,8,9,0,1b,2,3,4,5,6,7,8,9,0,1a,2,3,4,5,6,7,8,9,0\r\n";
+		StringReader sr = new StringReader(csvDataB);
+
+		S2CSVParseCtrl<Hoge7Csv> c = S2CSVUtil.getCSVCtrlFactory()
+				.getParseController(Hoge7Csv.class, sr);
+
+		List<Hoge7Csv> parseAll = c.parseAll();
+		
+		for (Hoge7Csv hoge7Csv : parseAll) {
+			
+			System.out.println(hoge7Csv);
 		}
 	}
 }
